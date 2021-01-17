@@ -43,13 +43,8 @@ if __name__ == "__main__":
     VERBOSE = False
     DEBUG = False
     #fetch data
-    accs = 0
-    trials = 0
-    while True:
-        trials += 1
-        train, test = prepare_data.fetch_data(mode='test', debug=DEBUG)
-        X_tune, y_tune = preprocess_feature(train)
-        X_test, y_test = preprocess_feature(test)
-        accs += classifiers.call_svm(X_tune, y_tune, X_test, y_test, verbose=VERBOSE)
-        print (f'Total trials: {trials}\t Correct Predictions: {accs}\tOverall Acc:{accs/trials}')
-    
+    train, test = prepare_data.fetch_data(mode='test', debug=DEBUG)
+    X_tune, y_tune = preprocess_feature(train)
+    X_test, y_test = preprocess_feature(test)
+    classifiers.call_svm(X_tune, y_tune, X_test, y_test, verbose=VERBOSE)
+        
