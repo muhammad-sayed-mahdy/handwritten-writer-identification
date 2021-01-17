@@ -1,5 +1,5 @@
 #Global imports
-from global_imports import np, pywt, cv2, feature
+from global_imports import np, pywt, cv2, feature, Image
 
 def waveletTransform(imArray, mode='haar'):
 
@@ -19,7 +19,7 @@ def waveletTransform(imArray, mode='haar'):
     imArray_H =  np.uint8(imArray_H)
     return imArray_H
 
-def LPB(img,rad,p=8,xgrid =1 ,ygrid =8):
+def LPB(img,rad,p=8,xgrid =8 ,ygrid =8):
     img_lbp = feature.local_binary_pattern(img,p,rad)
 
     # should divide img into histogram grids and return histograms
@@ -28,13 +28,20 @@ def LPB(img,rad,p=8,xgrid =1 ,ygrid =8):
     xstep = xdim//xgrid
     ystep  = ydim//ygrid
     list_histograms = []
-    img_lbp = np.float32(img_lbp)
+    
+    img_lbp = np.uint8(img_lbp)
+    # x = Image.fromarray(img_lbp)
+    # x.show()
+
     for i in range(xgrid):
         xstart = 0
         ystart = 0
         for j in range(ygrid):
+            # x = Image.fromarray(img_lbp[xstart:xstart+xstep,ystart:ystart+ystep])
+            # x.show()
             histogram = cv2.calcHist([img_lbp[xstart:xstart+xstep,ystart:ystart+ystep]],[0],None,[256],[0,256])
-            list_histograms.append(histogram)
+            for h in histogram:
+                list_histograms.append(h[0])
             xstart +=xstep
             ystart +=ystep
     return list_histograms

@@ -21,7 +21,7 @@ def get_lines_coord(image):
     y_end = max(lines_indexes)
 
     kernel = np.ones((5,100), np.uint8)
-    img_dilation = cv2.dilate(thresh, kernel, iterations=2)
+    img_dilation = cv2.dilate(image, kernel, iterations=2)
     ctrs, hier = cv2.findContours(img_dilation.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     #sort contours
     sorted_ctrs = sorted(ctrs, key=lambda ctr: cv2.boundingRect(ctr)[0])
