@@ -1,7 +1,5 @@
-import numpy as np
-import pywt
-import cv2
-from skimage import feature    
+#Global imports
+from global_imports import np, pywt, cv2, feature
 
 def waveletTransform(imArray, mode='haar'):
 

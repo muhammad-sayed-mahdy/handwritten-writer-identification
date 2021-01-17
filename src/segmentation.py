@@ -1,5 +1,5 @@
-import cv2
-import numpy as np
+#Global Imports
+from global_imports import cv2, np
 
 def discard(image):
     image = np.uint8(image)

@@ -1,6 +1,6 @@
-from matplotlib import pyplot as plt
-import cv2
-import numpy as np
+#Global imports
+from global_imports import cv2, np, plt
+#Local imports
 import preprocessing
 import features
 
