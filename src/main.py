@@ -13,5 +13,5 @@ list_images = preprocessing.preprocess(image)
 # for every image of line text
 for img in list_images:
     img_wt = features.waveletTransform(img,'db1')
-    img_lbp = features.LPB(img_wt,1,8)
+    list_histogram = features.LPB(img_wt,1,8)
     
