@@ -4,9 +4,6 @@ from global_imports import cv2, np, plt
 import preprocessing
 import features
 
-
-
-
 #import image
 image = cv2.imread('input.png')
 list_images = preprocessing.preprocess(image)
