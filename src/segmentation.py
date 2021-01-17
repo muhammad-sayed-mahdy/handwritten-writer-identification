@@ -21,14 +21,21 @@ def get_lines_coord(image):
     y_end = max(lines_indexes)
 
     kernel = np.ones((5,100), np.uint8)
-    img_dilation = cv2.dilate(image, kernel, iterations=2)
-    ctrs, hier = cv2.findContours(img_dilation.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+    # closing
+    kernel_closing = np.ones((5,200), np.uint8)
+    img_closing = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel_closing)
+    # opening
+    kernel_opening = np.ones((1,200), np.uint8)
+    img_opening = cv2.morphologyEx(img_closing, cv2.MORPH_OPEN, kernel_opening)
+
+    ctrs, hier = cv2.findContours(img_opening.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     #sort contours
     sorted_ctrs = sorted(ctrs, key=lambda ctr: cv2.boundingRect(ctr)[0])
     lines_of_text = []
     for i, ctr in enumerate(sorted_ctrs):
         # Get bounding boxl
         x, y, w, h = cv2.boundingRect(ctr)
-        if(y< y_end and y>y_start and h>80):
+        if(y< y_end and y>y_start and h>40):
             lines_of_text.append((y,y+h,x,x+w))
     return  lines_of_text
