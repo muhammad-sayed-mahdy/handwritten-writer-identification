@@ -4,7 +4,7 @@ from global_imports import np, svm, mode, StatisticsError
 
 
 
-def call_svm(X_tune, y_tune, X_test, y_test, verbose=False):
+def call_svm(X_tune, y_tune, X_test, y_test, verbose=False, _mode='test'):
 
 
     #avg acc: 
@@ -20,23 +20,24 @@ def call_svm(X_tune, y_tune, X_test, y_test, verbose=False):
 
     y_pred = clf.predict(X_test)
     
-    y_pred_most = -1
-    stat_error = False
-    try:
-        y_pred_most =  (mode(y_pred))
-    except StatisticsError:
-        print (f'False prediction -- y_pred = {y_pred}\ty_test = {y_test[0]}')
-        stat_error = True
+    if _mode == 'test':
+        y_pred_most = -1
+        stat_error = False
+        try:
+            y_pred_most =  (mode(y_pred))
+        except StatisticsError:
+            print (f'False prediction -- y_pred = {y_pred}\ty_test = {y_test[0]}')
+            stat_error = True
+        if verbose : print(f'True Author:{y_test[0]}\tPred Author:{y_pred_most}')
 
-    if verbose : print(f'True Author:{y_test[0]}\tPred Author:{y_pred_most}')
     accuracy = np.sum(y_pred == y_test) / len(y_test)
 
     if verbose : print (f"Predicted with accuracy:\t{accuracy*100}%")
 
-    if y_test[0] == y_pred_most:
+    if _mode == 'test' and y_test[0] == y_pred_most:
         return 1
 
-    if not stat_error: #and yet its a misclf.
+    if _mode == 'test' and  not stat_error: #and yet its a misclf.
         print (f'False prediction -- y_pred = {y_pred}\ty_test = {y_test[0]}')
     return 0
 

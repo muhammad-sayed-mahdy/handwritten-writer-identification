@@ -42,9 +42,10 @@ if __name__ == "__main__":
 
     VERBOSE = True
     DEBUG = False
+    MODE = 'test'
     #fetch data
-    train, test = prepare_data.fetch_data(mode='test', debug=DEBUG)
+    train, test = prepare_data.fetch_data(mode=MODE, debug=DEBUG)
     X_tune, y_tune = preprocess_feature(train)
     X_test, y_test = preprocess_feature(test)
-    classifiers.call_svm(X_tune, y_tune, X_test, y_test, verbose=VERBOSE)
+    classifiers.call_svm(X_tune, y_tune, X_test, y_test, verbose=VERBOSE, _mode=MODE)
         
