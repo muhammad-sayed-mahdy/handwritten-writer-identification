@@ -6,7 +6,7 @@ import preprocessing
 import features
 import classifiers
 import prepare_data
-
+import evaluations
 
 
 def preprocess_feature(paths):
@@ -41,10 +41,14 @@ if __name__ == "__main__":
     # prepare_data.print_data_stat()
 
     VERBOSE = False
-    DEBUG = True
+    DEBUG = False
     #fetch data
-    train, test = prepare_data.fetch_data(mode='train', debug=DEBUG)
-    X_tune, y_tune = preprocess_feature(train)
-    X_test, y_test = preprocess_feature(test)
-    classifiers.call_svm(X_tune, y_tune, X_test, y_test)
-    
+    accrss = np.zeros([15])
+    for i in range (100):
+        print (i)
+        train, test = prepare_data.fetch_data(mode='train', debug=DEBUG)
+        X_tune, y_tune = preprocess_feature(train)
+        X_test, y_test = preprocess_feature(test)
+        accrs = classifiers.call_svm(X_tune, y_tune, X_test, y_test, verbose=VERBOSE)
+        accrss = np.add(accrss,accrs)
+    evaluations.plot_regz_acrs(accrss)

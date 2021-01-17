@@ -4,16 +4,23 @@ from global_imports import np, svm
 
 
 
-def call_svm(X_tune, y_tune, X_test, y_test):
+def call_svm(X_tune, y_tune, X_test, y_test, verbose=False):
 
-    regz = 100
-    gamma = 0.1
-    clf = svm.SVC(kernel="rbf", gamma=gamma, C=regz, probability= True)
-    print ("Start classifying, This may take a while.....")
-    clf.fit(X_tune, y_tune)
-    print ("done fitting, let's test")
 
-    y_pred = clf.predict(X_test)
+    #avg acc: 
+    # regz = 100 -> 1000 -> 10K
+    reg_list = np.linspace(2,4, num=15)
+    accuracys = []
+    for reg in reg_list:
+        regz = int(pow(10,reg))
+        clf = svm.SVC(kernel="poly", C=regz, probability= True, degree=3, tol=0.8)
+    
+        clf.fit(X_tune, y_tune)
 
-    accuracy = np.sum(y_pred == y_test) / len(y_test)
-    print (f"Total accuracy: {accuracy}")
+        y_pred = clf.predict(X_test)
+
+        accuracy = np.sum(y_pred == y_test) / len(y_test)
+        if verbose : print (f"With reg:\t{regz}, Total accuracy:\t{accuracy*100}%")
+        accuracys.append(accuracy)
+
+    return accuracys

@@ -41,7 +41,7 @@ def LPB(img,rad,p=8,xgrid =8 ,ygrid =8):
             # x.show()
             histogram = cv2.calcHist([img_lbp[xstart:xstart+xstep,ystart:ystart+ystep]],[0],None,[256],[0,256])
             for h in histogram:
-                list_histograms.append(h[0])
+                list_histograms.append(int(h[0]))
             xstart +=xstep
             ystart +=ystep
     return list_histograms
