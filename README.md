@@ -2,7 +2,10 @@
 handwritten writer identification using classical machine learning pattern recognition techniques 
 
 ### Requirements
-    ~ pip install -r requirement.txt 
+you can install the requirements using  
+`pip install -r requirements.txt`  
+or you can use conda to create a virtual environment and install packages using  
+`conda env create -f environment.yaml` 
 
 ### STAT
     + Total number of authors: 657
