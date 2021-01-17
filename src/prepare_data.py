@@ -42,3 +42,24 @@ def fetch_data(random_authors=3, number_train_forms=2, number_test_forms=1, mode
             train_paths.append(user_i_train)
             test_paths.append(user_i_test)
         return train_paths, test_paths
+
+
+def print_data_stat():
+    data = os.listdir('../data/')
+    sizes = []
+    imp_authors = {}
+    file_size = {}
+    data = sorted(data)
+    for x in data:
+        files = os.listdir('../data/'+x)
+        file_size[x] = len(files)
+        if len(files) >= 3:
+            imp_authors[x] = len(files)
+        sizes.append(len(files))
+
+    # print ('Dict of sizes', file_size)
+    print ('List of sizes in order:',sizes)
+    print ('Total Number of Authors:',len(file_size))
+    print ('Unique Sizes:',set(sizes))
+    print ('Imp authors with more than 2 files:',imp_authors)
+    print ('Total number of important authors:',len(imp_authors))

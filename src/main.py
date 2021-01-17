@@ -4,7 +4,7 @@ from global_imports import cv2, np, plt, Image, time
 #Local imports
 import preprocessing
 import features
-import pre_clf
+import classifiers
 import prepare_data
 
 
@@ -37,13 +37,14 @@ def preprocess_feature(paths):
 
 
 
-
-
 if __name__ == "__main__":
-    VERBOSE = True
+    # prepare_data.print_data_stat()
+
+    VERBOSE = False
+    DEBUG = True
     #fetch data
-    train, test = prepare_data.fetch_data(mode='train', debug=False)
+    train, test = prepare_data.fetch_data(mode='train', debug=DEBUG)
     X_tune, y_tune = preprocess_feature(train)
     X_test, y_test = preprocess_feature(test)
-   
+    classifiers.call_svm(X_tune, y_tune, X_test, y_test)
     
