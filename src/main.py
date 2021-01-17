@@ -26,9 +26,16 @@ def preprocess_feature(paths):
             for img in list_images:
                 # x = Image.fromarray(img)
                 # x.show()
-                img_wt = features.waveletTransform(img,'db4')
-                his_of_line = features.LPB(img_wt,1,8)
-                X_list.append(his_of_line)
+                coeffs = features.waveletTransform(img,'db4')
+                cA ,(cH,cV,cD) = coeffs
+                hist_of_line_horizontal = features.LPBH(cH,1,8)
+                hist_of_line_vertical = features.LPBH(cV,1,8)
+                hist_of_line_diagonal = features.LPBH(cD,1,8)
+
+                # stacking histograms(features)
+                hist_of_line = hist_of_line_horizontal + hist_of_line_vertical + hist_of_line_diagonal
+
+                X_list.append(hist_of_line)
                 y_list.append(author_i)
             
     if VERBOSE: print(f'X shape:\t{len(X_list) , len(X_list[0])}')
@@ -41,11 +48,12 @@ if __name__ == "__main__":
     # prepare_data.print_data_stat()
 
     VERBOSE = True
-    DEBUG = False
+    DEBUG = True
     MODE = 'test'
     #fetch data
-    train, test = prepare_data.fetch_data(mode=MODE, debug=DEBUG)
-    X_tune, y_tune = preprocess_feature(train)
-    X_test, y_test = preprocess_feature(test)
-    classifiers.call_svm(X_tune, y_tune, X_test, y_test, verbose=VERBOSE, _mode=MODE)
+    while True:
+        train, test = prepare_data.fetch_data(mode=MODE, debug=DEBUG)
+        X_tune, y_tune = preprocess_feature(train)
+        X_test, y_test = preprocess_feature(test)
+        classifiers.call_svm(X_tune, y_tune, X_test, y_test, verbose=VERBOSE, _mode=MODE)
         

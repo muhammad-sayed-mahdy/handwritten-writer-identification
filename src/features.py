@@ -1,25 +1,22 @@
 #Global imports
 from global_imports import np, pywt, cv2, feature, Image
 
-def waveletTransform(imArray, mode='haar'):
+
+# convert transform image into wavelet transform
+# returns (approx coeff [low freq]- horizontal detailed coeff - vertical detailed coeff -diagonal detailed coeff [high freq])
+def waveletTransform(imArray, Wname='db4'):
 
     #convert to float
     imArray =  np.float32(imArray)   
     imArray /= 255
     # compute coefficients 
-    coeffs=pywt.wavedec2(imArray, mode)
+    coeffs=pywt.dwt2(imArray,Wname,mode = 'periodization')
 
-    #Process Coefficients
-    coeffs_H=list(coeffs)  
-    coeffs_H[0] *= 0 
+    # cA ,(cH,cV,cD) = coeffs
 
-    # reconstruction
-    imArray_H=pywt.waverec2(coeffs_H, mode)
-    imArray_H *= 255
-    imArray_H =  np.uint8(imArray_H)
-    return imArray_H
+    return coeffs
 
-def LPB(img,rad,p=8,xgrid =8 ,ygrid =8):
+def LPBH(img,rad,p=8,xgrid =1 ,ygrid =8):
     img_lbp = feature.local_binary_pattern(img,p,rad)
 
     # should divide img into histogram grids and return histograms

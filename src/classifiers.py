@@ -9,12 +9,12 @@ def call_svm(X_tune, y_tune, X_test, y_test, verbose=False, _mode='test'):
 
     #avg acc: 
     # regz = 100 -> 1000 -> 10K
-    # reg_list = np.linspace(2,3, num=15)
+    # reg_list = np.linspace(0,9, num=10)
     # accuracys = []
     # for reg in reg_list:
     #     regz = int(pow(10,reg))
 
-    clf = svm.SVC(kernel="poly", C=3600, probability= True, degree=3, tol=1)
+    clf = svm.SVC(kernel="poly", C=2500,gamma='scale', probability= True, degree=3, tol=1)
 
     clf.fit(X_tune, y_tune)
 
