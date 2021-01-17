@@ -6,3 +6,4 @@ from matplotlib import pyplot as plt
 from PIL import Image
 import time
 from sklearn import svm
+from statistics import mode

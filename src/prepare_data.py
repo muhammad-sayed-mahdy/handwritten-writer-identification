@@ -42,6 +42,37 @@ def fetch_data(random_authors=3, number_train_forms=2, number_test_forms=1, mode
             train_paths.append(user_i_train)
             test_paths.append(user_i_test)
         return train_paths, test_paths
+        
+    elif mode == 'test':
+        data_path = 'data/' if debug else '../data/'
+
+        datas = os.listdir(data_path)
+        train_paths = []
+        test_paths = []
+        
+        rand_author_test_sample = random.randint(0,2)
+        for author_i in range (3):
+            user_i_train = []
+            user_i_test = []
+            rand_auth = random.choice(datas)
+            while len(os.listdir(data_path+rand_auth)) < 3 or \
+                    len(os.listdir(data_path+rand_auth)) < 2+1:
+                rand_auth = random.choice(datas)
+
+            forms_paths = os.listdir(data_path+rand_auth)
+            i = 0
+            for form in forms_paths:
+                if i < 2: 
+                    user_i_train.append(data_path+rand_auth+'/'+form)
+
+                elif i == 2 and author_i == rand_author_test_sample:
+                    user_i_test.append(data_path+rand_auth+'/'+form)
+                else: break
+
+                i += 1
+            train_paths.append(user_i_train)
+            test_paths.append(user_i_test)
+        return train_paths, test_paths
 
 
 def print_data_stat():

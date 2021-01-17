@@ -1,5 +1,5 @@
 #Global imports
-from global_imports import np, svm
+from global_imports import np, svm, mode
 #local imports
 
 
@@ -19,7 +19,10 @@ def call_svm(X_tune, y_tune, X_test, y_test, verbose=False):
     clf.fit(X_tune, y_tune)
 
     y_pred = clf.predict(X_test)
-
+    y_pred_most =  (mode(y_pred))
+    
+    if verbose : print(f'True Author:{y_test[0]}\tPred Author:{y_pred_most}')
     accuracy = np.sum(y_pred == y_test) / len(y_test)
+
     if verbose : print (f"Total accuracy:\t{accuracy*100}%")
 
