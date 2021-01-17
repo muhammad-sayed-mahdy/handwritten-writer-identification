@@ -26,7 +26,7 @@ def preprocess_feature(paths):
             for img in list_images:
                 # x = Image.fromarray(img)
                 # x.show()
-                img_wt = features.waveletTransform(img,'db1')
+                img_wt = features.waveletTransform(img,'db4')
                 his_of_line = features.LPB(img_wt,1,8)
                 X_list.append(his_of_line)
                 y_list.append(author_i)
