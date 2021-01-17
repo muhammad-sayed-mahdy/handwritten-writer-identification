@@ -40,7 +40,7 @@ def preprocess_feature(paths):
 if __name__ == "__main__":
     # prepare_data.print_data_stat()
 
-    VERBOSE = False
+    VERBOSE = True
     DEBUG = False
     #fetch data
     train, test = prepare_data.fetch_data(mode='test', debug=DEBUG)

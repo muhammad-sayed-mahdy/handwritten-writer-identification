@@ -14,7 +14,7 @@ def call_svm(X_tune, y_tune, X_test, y_test, verbose=False):
     # for reg in reg_list:
     # regz = int(pow(10,reg))
 
-    clf = svm.SVC(kernel="poly", C=3600, probability= True, degree=3, tol=0.8)
+    clf = svm.SVC(kernel="poly", C=3600, probability= True, degree=3, tol=1)
 
     clf.fit(X_tune, y_tune)
 
@@ -30,7 +30,7 @@ def call_svm(X_tune, y_tune, X_test, y_test, verbose=False):
     if verbose : print(f'True Author:{y_test[0]}\tPred Author:{y_pred_most}')
     accuracy = np.sum(y_pred == y_test) / len(y_test)
 
-    if verbose : print (f"Total accuracy:\t{accuracy*100}%")
+    if verbose : print (f"Predicted with accuracy:\t{accuracy*100}%")
 
     if y_test[0] == y_pred_most:
         return 1
