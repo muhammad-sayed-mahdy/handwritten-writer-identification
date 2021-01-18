@@ -1,6 +1,6 @@
 #global imports
 from global_imports import cv2, np, PCA, StandardScaler
-
+import time
 #local imports
 import prepare_data     #step 0
 import preprocessing    #step 1.1
@@ -26,6 +26,7 @@ def step_1(paths, VERBOSE=False):
     X_list = []
     y_list = []
     for author_i,tr in enumerate(paths):
+        lines_count = 0
         for image_i, image_path in enumerate(tr):
             image = cv2.imread(image_path)
             list_images = preprocessing.preprocess(image)
@@ -40,20 +41,26 @@ def step_1(paths, VERBOSE=False):
 
                 # stacking histograms(features)
                 hist_of_line = hist_of_line_horizontal + hist_of_line_vertical + hist_of_line_diagonal
-
+                lines_count += 1
                 X_list.append(hist_of_line)
                 y_list.append(author_i)
             
+        print (f'Author: {author_i}\t #lines: {lines_count}')
     if VERBOSE: print(f'X shape:\t{len(X_list) , len(X_list[0])}')
     return np.array(X_list),np.array(y_list)
 
-def step_2(X_tune, X_test, y_tune,verbose=False):
+def step_2(X_tune, X_test, y_tune,verbose=False,n_components=2):
     #scale
     sc = StandardScaler()
     X_tune = sc.fit_transform(X_tune)
     X_test = sc.transform(X_test)
     #pca
-    pca = PCA(n_components=2, copy=False)
+    # n_components = X_tune.shape[0]-1
+    n_components = 30
+    
+    print (f'N_cmp: {n_components}')
+        
+    pca = PCA(n_components=n_components, copy=False)
     X_tune = pca.fit_transform(X_tune)
     X_test = pca.transform(X_test)
     if verbose: print (f'New Shapes: X_tune: {X_tune.shape}\ty_tune: {y_tune.shape}')
@@ -71,7 +78,8 @@ def step_3(X_tune, y_tune, X_test, y_test, verbose=False, _mode='test', clf='svm
                     verbose=verbose, _mode=_mode)
 
 
-def pipe(feature='lbph', clf='svm', _mode='test', _verbose=False,pca_scatter=False):
+def pipe(feature='lbph', clf='svm', _mode='test', 
+            _verbose=False,pca_scatter=False,n_components=2):
     '''
         + This is the main function call for this file.
         + It specifies which feature ext. technique and which classifier to be used.
@@ -79,13 +87,19 @@ def pipe(feature='lbph', clf='svm', _mode='test', _verbose=False,pca_scatter=Fal
     if _verbose: print ('\n\t\tFetch..')
     train, test = step_0(_mode=_mode)
     if _verbose: print ('\t\tPreprocess and FE..')
+    
+    start_time = time.time()
+    
     X_tune, y_tune = step_1(train,_verbose)
     X_test, y_test = step_1(test,_verbose)
     if _verbose: print ('\t\tPCA..')
-    X_tune,X_test = step_2(X_tune,X_test,y_tune, verbose=_verbose)
+    X_tune,X_test = step_2(X_tune,X_test,y_tune, verbose=_verbose,n_components=n_components)
     if _verbose: print ('\t\tCLF..')
     pre, acc = step_3(X_tune, y_tune, X_test, y_test, verbose=_verbose, _mode=_mode, clf=clf)
     if pca_scatter and pre == 0: 
         evaluations.plot_scatter_pca(X_tune, y_tune)
+
+    print("--- %s seconds ---" % (time.time() - start_time))
+
     
     return pre, acc

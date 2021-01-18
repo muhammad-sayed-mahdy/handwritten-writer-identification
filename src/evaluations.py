@@ -67,10 +67,11 @@ def plot_scatter_pca(X_tune, y_tune):
 def eval_pca(VERBOSE=True):
     trials = 0
     correct = 0
+    n_comp = 50
     for _ in range(2000):
         pre, conf = pipeline.pipe(feature='lbph', clf='svm',_mode='test', 
-            _verbose=VERBOSE, pca_scatter=True)
+            _verbose=VERBOSE, pca_scatter=False, n_components=n_comp)
         correct += pre
         trials += 1
-        print (f'Trial: {trials}\tCorrects: {correct}\tAcc: {conf}\tOverall: {correct/trials}')
+        print (f'Trial: {trials}\tCorrects: {correct}\tConf: {conf}\tOverall: {correct/trials}')
         
