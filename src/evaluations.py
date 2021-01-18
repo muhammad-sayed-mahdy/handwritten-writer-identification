@@ -42,3 +42,23 @@ def eval_perfomance_lbph_svm(MODE, VERBOSE=False):
     plt.plot(falseacc)
     plt.show()
 # accuracy = 96.2%,   average confidence in true detected writers = 86.
+
+
+def plot_scatter_pca(X_tune, y_tune):
+    # x, y = np.random.rand(2, N)
+    # c = np.random.randint(1, 5, size=N)
+    # s = np.random.randint(10, 220, size=N)
+
+    fig, ax = plt.subplots()
+    scatter = ax.scatter(X_tune[:,0],X_tune[:,1], c =y_tune)
+
+    # produce a legend with the unique colors from the scatter
+    legend1 = ax.legend(*scatter.legend_elements(),
+                        loc="lower left", title="Classes")
+    ax.add_artist(legend1)
+
+    # produce a legend with a cross section of sizes from the scatter
+    # handles, labels = scatter.legend_elements(prop="sizes", alpha=0.6)
+    # legend2 = ax.legend(handles, labels, loc="upper right", title="Sizes")
+
+    plt.show()
