@@ -17,24 +17,27 @@ def eval_perfomance_lbph_svm(MODE, VERBOSE=False):
     #fetch data
     tr = 0
     pre = 0
-    acc = 0
+    conf = 0
     trueacc = np.zeros(101)
     falseacc = np.zeros(101)
     allacc = np.zeros(101)
     avgrtconv = 0
     for i in range(500):
-        pre, acc = pipeline.pipe(feature='lbph', clf='svm',_mode='test', _verbose=VERBOSE)
-        tr += pre
-        acc = int(100*acc + 0.5)
-        allacc[acc] += 1
-        if acc > 50:
-            avgrtconv += acc
+        pre, conf = pipeline.pipe(feature='lbph', clf='svm',_mode='test', _verbose=VERBOSE)
+        conf = int(100*conf + 0.5)
+        allacc[conf] += 1
         if pre == 1:
-            trueacc[acc] += 1
+            trueacc[conf] += 1
         else:
-            falseacc[acc] += 1
+            falseacc[conf] += 1
+        if pre == 1 and conf > 50:
+            tr += 1
+            avgrtconv += conf
+        if pre == 0 and conf > 50:
+            cnt += 1
     print(tr/5)
     print(avgrtconv/500)
+    print(cnt)
     plt.plot(allacc)
     plt.show()
     plt.plot(trueacc)
