@@ -3,7 +3,7 @@ import os, random
 #local imports
 
 
-def fetch_data(random_authors=3, number_train_forms=2, number_test_forms=1, _mode='train', debug = False):
+def fetch_data(random_authors=3, number_train_forms=2, number_test_forms=1, _mode='train'):
     '''
         + This function is responsible for fetching random images for the system
         to be tuned.
