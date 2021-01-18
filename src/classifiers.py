@@ -1,5 +1,5 @@
 #Global imports
-from global_imports import np, svm, mode, StatisticsError
+from global_imports import np, svm, mode, StatisticsError, KNeighborsClassifier
 #local imports
 
 

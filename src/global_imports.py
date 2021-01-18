@@ -8,3 +8,4 @@ import time
 from sklearn import svm
 import sklearn
 from statistics import mode, StatisticsError
+from sklearn.neighbors import KNeighborsClassifier

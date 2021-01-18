@@ -47,33 +47,38 @@ def preprocess_feature(paths):
 if __name__ == "__main__":
     # prepare_data.print_data_stat()
 
-    VERBOSE = True
+    VERBOSE = False
     DEBUG = True
     MODE = 'test'
     #fetch data
     tr = 0
     pre = 0
-    acc = 0
+    conf = 0
     trueacc = np.zeros(101)
     falseacc = np.zeros(101)
     allacc = np.zeros(101)
     avgrtconv = 0
+    cnt = 0
     for i in range(500):
+        print("iteration: ", i)
         train, test = prepare_data.fetch_data(mode=MODE, debug=DEBUG)
         X_tune, y_tune = preprocess_feature(train)
         X_test, y_test = preprocess_feature(test)
-        pre, acc = classifiers.call_svm(X_tune, y_tune, X_test, y_test, verbose=VERBOSE, _mode=MODE)
-        tr += pre
-        acc = int(100*acc + 0.5)
-        allacc[acc] += 1
-        if acc > 50:
-            avgrtconv += acc
+        pre, conf = classifiers.call_svm(X_tune, y_tune, X_test, y_test, verbose=VERBOSE, _mode=MODE)
+        conf = int(100*conf + 0.5)
+        allacc[conf] += 1
         if pre == 1:
-            trueacc[acc] += 1
+            trueacc[conf] += 1
         else:
-            falseacc[acc] += 1
+            falseacc[conf] += 1
+        if pre == 1 and conf > 50:
+            tr += 1
+            avgrtconv += conf
+        if pre == 0 and conf > 50:
+            cnt += 1
     print(tr/5)
     print(avgrtconv/500)
+    print(cnt)
     plt.plot(allacc)
     plt.show()
     plt.plot(trueacc)
