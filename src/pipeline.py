@@ -25,9 +25,7 @@ def step_1(paths, VERBOSE=False):
     X_list = []
     y_list = []
     for author_i,tr in enumerate(paths):
-
-        for image_i,image_path in enumerate(tr):
-            if VERBOSE: print (f'image\t{image_i}\tof author:\t{author_i}')
+        for image_i, image_path in enumerate(tr):
             image = cv2.imread(image_path)
             list_images = preprocessing.preprocess(image)
             for img in list_images:
@@ -62,8 +60,11 @@ def pipe(feature='lbph', clf='svm', _mode='test', _verbose=False):
         + This is the main function call for this file.
         + It specifies which feature ext. technique and which classifier to be used.
     '''
+    if _verbose: print ('\n\t\tFetch..')
     train, test = step_0(_mode=_mode)
+    if _verbose: print ('\t\tPreprocess and FE..')
     X_tune, y_tune = step_1(train,_verbose)
     X_test, y_test = step_1(test,_verbose)
+    if _verbose: print ('\t\tCLF..')
     pre, acc = step_2(X_tune, y_tune, X_test, y_test, verbose=_verbose, _mode=_mode, clf=clf)
     return pre, acc

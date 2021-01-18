@@ -42,7 +42,7 @@ def call_svm(X_tune, y_tune, X_test, y_test, verbose=False, _mode='test'):
             stat_error = True
 
         if verbose : print(f'True Author: {y_test[0]}\tPred Author: {y_pred_most}')
-    
+        if verbose : print (f"Predicted with accuracy:\t{accuracy*100}%")
     
         if y_test[0] == y_pred_most:
             return 1, accuracy
