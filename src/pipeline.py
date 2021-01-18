@@ -56,10 +56,9 @@ def step_2(X_tune, X_test, y_tune,verbose=False):
     pca = PCA(n_components=2, copy=False)
     X_tune = pca.fit_transform(X_tune)
     X_test = pca.transform(X_test)
-    print (f'New Shapes: X_tune: {X_tune.shape}\ty_tune: {y_tune.shape}')
-    print(pca.explained_variance_ratio_)
-    print(pca.singular_values_)
-    evaluations.plot_scatter_pca(X_tune, y_tune)
+    if verbose: print (f'New Shapes: X_tune: {X_tune.shape}\ty_tune: {y_tune.shape}')
+    if verbose: print(pca.explained_variance_ratio_)
+    if verbose: print(pca.singular_values_)
     return X_tune, X_test
 
 def step_3(X_tune, y_tune, X_test, y_test, verbose=False, _mode='test', clf='svm'):
@@ -68,10 +67,11 @@ def step_3(X_tune, y_tune, X_test, y_test, verbose=False, _mode='test', clf='svm
         used. and choose from it.
     '''
     if clf == 'svm':
-        return classifiers.call_svm(X_tune, y_tune, X_test, y_test, verbose=verbose, _mode=_mode)
+        return classifiers.call_svm(X_tune, y_tune, X_test, y_test, 
+                    verbose=verbose, _mode=_mode)
 
 
-def pipe(feature='lbph', clf='svm', _mode='test', _verbose=False):
+def pipe(feature='lbph', clf='svm', _mode='test', _verbose=False,pca_scatter=False):
     '''
         + This is the main function call for this file.
         + It specifies which feature ext. technique and which classifier to be used.
@@ -85,4 +85,7 @@ def pipe(feature='lbph', clf='svm', _mode='test', _verbose=False):
     X_tune,X_test = step_2(X_tune,X_test,y_tune, verbose=_verbose)
     if _verbose: print ('\t\tCLF..')
     pre, acc = step_3(X_tune, y_tune, X_test, y_test, verbose=_verbose, _mode=_mode, clf=clf)
+    if pca_scatter and pre == 0: 
+        evaluations.plot_scatter_pca(X_tune, y_tune)
+    
     return pre, acc

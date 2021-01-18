@@ -1,6 +1,6 @@
 #global imports
 from global_imports import plt, np
-
+import random
 #local imports
 import pipeline
 
@@ -53,15 +53,24 @@ def plot_scatter_pca(X_tune, y_tune):
     # s = np.random.randint(10, 220, size=N)
 
     fig, ax = plt.subplots()
-    scatter = ax.scatter(X_tune[:,0],X_tune[:,1], c =y_tune)
+    scatter = ax.scatter(X_tune[:,0],X_tune[:,1], c =y_tune, s=50)
 
     # produce a legend with the unique colors from the scatter
     legend1 = ax.legend(*scatter.legend_elements(),
                         loc="lower left", title="Classes")
     ax.add_artist(legend1)
+    # plt.show()
+    name= 'graphs/pca/failed/pca_'+str(random.randint(0,100))+'.png'
+    plt.savefig(name)
+    plt.clf()
 
-    # produce a legend with a cross section of sizes from the scatter
-    # handles, labels = scatter.legend_elements(prop="sizes", alpha=0.6)
-    # legend2 = ax.legend(handles, labels, loc="upper right", title="Sizes")
-
-    plt.show()
+def eval_pca(VERBOSE=True):
+    trials = 0
+    correct = 0
+    for _ in range(2000):
+        pre, conf = pipeline.pipe(feature='lbph', clf='svm',_mode='test', 
+            _verbose=VERBOSE, pca_scatter=True)
+        correct += pre
+        trials += 1
+        print (f'Trial: {trials}\tCorrects: {correct}\tAcc: {conf}\tOverall: {correct/trials}')
+        

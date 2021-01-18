@@ -131,3 +131,4 @@ dmypy.json
 .vscode
 data
 Main.ipynb
+graphs/pca/failed

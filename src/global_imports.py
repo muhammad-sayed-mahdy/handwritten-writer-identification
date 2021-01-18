@@ -8,9 +8,6 @@ import time
 from sklearn import svm
 import sklearn
 from statistics import mode, StatisticsError
-<<<<<<< HEAD
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
-=======
 from sklearn.neighbors import KNeighborsClassifier
->>>>>>> dfc0b4abf4579149195dc63206621242285495f1
