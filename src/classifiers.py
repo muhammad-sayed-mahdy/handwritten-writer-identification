@@ -55,3 +55,52 @@ def call_svm(X_tune, y_tune, X_test, y_test, verbose=False, _mode='test'):
     #incase of training
     if verbose : print (f"Predicted with accuracy:\t{accuracy*100}%")
     return None, accuracy
+
+def call_knn(X_tune, y_tune, X_test, y_test, verbose=False, _mode='test'):
+    '''
+        + Our second classifier. KNN (K-Nearest Neighbour).
+        + This aims to classify components according to the nearest k samples.
+        + steps: 
+            0- declare
+            1- fitting
+            2- predict
+            3- score
+        + TUNEs:
+            1- n_neighbors: number of k nearest neighbours
+        + returns:
+            0/1: for wrong/correct predictions
+            accuracy: a float [0,1]
+    '''
+    #step 0: declare
+    neigh = KNeighborsClassifier(n_neighbors=12)
+    #step 1: fit
+    neigh.fit(X_tune, y_tune)
+    #step 2: predict
+    y_pred = neigh.predict(X_test)
+    #step 3: score
+    accuracy = np.sum(y_pred == y_test) / len(y_test)
+
+    #used in evaluations and verboses.
+    if _mode == 'test':
+        y_pred_most = -1
+        stat_error = False
+        try:
+            y_pred_most =  (mode(y_pred))
+        except StatisticsError:
+            print (f'False prediction (equal values) -- y_pred = {y_pred}\ty_test = {y_test[0]}')
+            stat_error = True
+
+        if verbose : print(f'True Author: {y_test[0]}\tPred Author: {y_pred_most}')
+        if verbose : print (f"Predicted with accuracy:\t{accuracy*100}%")
+    
+        if y_test[0] == y_pred_most:
+            return 1, accuracy
+
+        if not stat_error: #and yet its a misclf.
+            print (f'False prediction -- y_pred = {y_pred}\ty_test = {y_test[0]}')
+
+        return 0, accuracy
+
+    #incase of training
+    if verbose : print (f"Predicted with accuracy:\t{accuracy*100}%")
+    return None, accuracy
