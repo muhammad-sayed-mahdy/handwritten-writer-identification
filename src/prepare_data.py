@@ -14,7 +14,7 @@ def fetch_data(random_authors=3, number_train_forms=2, number_test_forms=1, mode
             mode: if `train` .. you may tune the above parameters, if `test` they will be adjsuted to (3,2,1)
     '''
     if mode == 'train':
-        data_path = 'data/' if debug else '../data/'
+        data_path = 'data/'
 
         datas = os.listdir(data_path)
         train_paths = []
@@ -44,7 +44,7 @@ def fetch_data(random_authors=3, number_train_forms=2, number_test_forms=1, mode
         return train_paths, test_paths
         
     elif mode == 'test':
-        data_path = 'data/' if debug else '../data/'
+        data_path = 'data/' 
 
         datas = os.listdir(data_path)
         train_paths = []
