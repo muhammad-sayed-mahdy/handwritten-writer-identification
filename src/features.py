@@ -27,6 +27,10 @@ def LPBH(img,rad,p=8,xgrid =1 ,ygrid =8):
     list_histograms = []
     
     img_lbp = np.uint8(img_lbp)
+    histogram = cv2.calcHist([img_lbp],[0],None,[256],[0,256])
+    for i in histogram:
+        list_histograms.append(i[0])
+    return list_histograms
     # x = Image.fromarray(img_lbp)
     # x.show()
 
@@ -42,3 +46,41 @@ def LPBH(img,rad,p=8,xgrid =1 ,ygrid =8):
             xstart +=xstep
             ystart +=ystep
     return list_histograms
+
+def LTPH(img, thres = 5, xgrid = 1, ygrid = 8):
+    dx = [0, 1, 1, 1, 0, -1, -1, -1]
+    dy = [-1, -1, 0, 1, 1, 1, 0, -1]
+    img_ltp = np.zeros_like(img, np.uint16)
+    for x in range(1, len(img)-1):
+        for y in range(1, len(img[0])-1):
+            two = 1
+            num = 0
+            for i in range(8):
+                nx = x + dx[i]
+                ny = y + dy[i]
+                add = 0
+                if img[nx][ny] >= img[x][y] + thres:
+                    add = 1
+                elif img[nx][ny] < img[x][y] - thres:
+                    add = -1
+                num += add*two
+                two <<= 1
+            img_ltp[x][y] = num+255
+
+    xstep = len(img_ltp)//xgrid
+    ystep  = len(img_ltp[0])//ygrid
+    list_histograms = []
+
+    for i in range(xgrid):
+        xstart = 0
+        ystart = 0
+        for j in range(ygrid):
+            # x = Image.fromarray(img_lbp[xstart:xstart+xstep,ystart:ystart+ystep])
+            # x.show()
+            histogram = cv2.calcHist([img_ltp[xstart:xstart+xstep,ystart:ystart+ystep]],[0],None,[512],[0,512])
+            for h in histogram:
+                list_histograms.append(int(h[0]))
+            xstart +=xstep
+            ystart +=ystep
+    return list_histograms
+            
