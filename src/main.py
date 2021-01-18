@@ -47,13 +47,17 @@ def preprocess_feature(paths):
 if __name__ == "__main__":
     # prepare_data.print_data_stat()
 
-    VERBOSE = True
-    DEBUG = True
+    VERBOSE = False
+    DEBUG = False
     MODE = 'test'
     #fetch data
+    trials= 0
+    correct = 0
     while True:
         train, test = prepare_data.fetch_data(mode=MODE, debug=DEBUG)
         X_tune, y_tune = preprocess_feature(train)
         X_test, y_test = preprocess_feature(test)
-        classifiers.call_svm(X_tune, y_tune, X_test, y_test, verbose=VERBOSE, _mode=MODE)
+        correct += classifiers.call_svm(X_tune, y_tune, X_test, y_test, verbose=VERBOSE, _mode=MODE)
+        trials += 1
+        print (f'Trial:{trials}\t\tCorrects:{correct}\tOverall Acc:{correct/trials}')
         
