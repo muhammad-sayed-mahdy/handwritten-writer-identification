@@ -68,23 +68,23 @@ def plot_scatter_pca(X_tune, y_tune):
 
 def eval_pca(VERBOSE=True):
     trials = 0
-    correct = 0
+    total_correct = 0
     n_comp = 50
     for _ in range(2000):
-        pre, conf = pipeline.pipe(feature='lbph', clf='svm',_mode='test', 
+        pre, conf, correct = pipeline.pipe(feature='lbph', clf='svm',_mode='test', 
             _verbose=VERBOSE, pca_scatter=False, n_components=n_comp)
-        correct += pre
+        total_correct += correct
         trials += 1
-        print (f'Trial: {trials}\tCorrects: {correct}\tConf: {conf}\tOverall: {correct/trials}')
+        print (f'Trial: {trials}\tCorrects: {total_correct}\tConf: {conf}\tOverall: {total_correct/trials}')
         
 
 def eval_ada(VERBOSE=True):
     
     acr = np.zeros(10)
     for _ in range (100):
-        pre, conf = pipeline.pipe(feature='lbph', clf='adaboost',_mode='test', 
+        _, _, correct = pipeline.pipe(feature='lbph', clf='adaboost',_mode='test', 
             _verbose=VERBOSE)
-        acr += (pre)
+        acr += (correct)
     
     est_list = np.linspace(2,3.7,num=10)
     plt.bar(est_list,acr)
