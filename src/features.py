@@ -27,6 +27,10 @@ def LPBH(img,rad,p=8,xgrid =1 ,ygrid =8):
     list_histograms = []
     
     img_lbp = np.uint8(img_lbp)
+    histogram = cv2.calcHist([img_lbp],[0],None,[256],[0,256])
+    for i in histogram:
+        list_histograms.append(i[0])
+    return list_histograms
     # x = Image.fromarray(img_lbp)
     # x.show()
 
