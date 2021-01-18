@@ -10,4 +10,7 @@ if __name__ == "__main__":
 
     VERBOSE = True
     MODE = 'test'
-    evaluations.eval_perfomance_lbph_svm(MODE, VERBOSE)
+    # evaluations.eval_perfomance_lbph_svm(MODE, VERBOSE)
+    while True:
+        pipeline.pipe(_verbose=VERBOSE)
+    

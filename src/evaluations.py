@@ -41,4 +41,4 @@ def eval_perfomance_lbph_svm(MODE, VERBOSE=False):
     plt.show()
     plt.plot(falseacc)
     plt.show()
-# accuracy = 96.2%,   average confidence in true detected writers = 86.756
+# accuracy = 96.2%,   average confidence in true detected writers = 86.

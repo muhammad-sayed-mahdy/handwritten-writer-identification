@@ -1,5 +1,5 @@
 #global imports
-from global_imports import cv2, np
+from global_imports import cv2, np, PCA, StandardScaler
 
 #local imports
 import prepare_data     #step 0
@@ -46,7 +46,20 @@ def step_1(paths, VERBOSE=False):
     if VERBOSE: print(f'X shape:\t{len(X_list) , len(X_list[0])}')
     return np.array(X_list),np.array(y_list)
 
-def step_2(X_tune, y_tune, X_test, y_test, verbose=False, _mode='test', clf='svm'):
+def step_2(X_tune, X_test, verbose=False):
+    #scale
+    sc = StandardScaler()
+    X_tune = sc.fit_transform(X_tune)
+    X_test = sc.transform(X_test)
+
+    pca = PCA(n_components=2, copy=False)
+    X_tune = pca.fit_transform(X_tune)
+    X_test = pca.transform(X_test)
+    print(pca.explained_variance_ratio_)
+    print(pca.singular_values_)
+    return X_tune, X_test
+
+def step_3(X_tune, y_tune, X_test, y_test, verbose=False, _mode='test', clf='svm'):
     '''
         + For now it's just a calling function, but later on, this will be passed the classifier technique
         used. and choose from it.
@@ -65,6 +78,8 @@ def pipe(feature='lbph', clf='svm', _mode='test', _verbose=False):
     if _verbose: print ('\t\tPreprocess and FE..')
     X_tune, y_tune = step_1(train,_verbose)
     X_test, y_test = step_1(test,_verbose)
+    if _verbose: print ('\t\tPCA..')
+    X_tune,X_test = step_2(X_tune,X_test, verbose=_verbose)
     if _verbose: print ('\t\tCLF..')
-    pre, acc = step_2(X_tune, y_tune, X_test, y_test, verbose=_verbose, _mode=_mode, clf=clf)
+    pre, acc = step_3(X_tune, y_tune, X_test, y_test, verbose=_verbose, _mode=_mode, clf=clf)
     return pre, acc
