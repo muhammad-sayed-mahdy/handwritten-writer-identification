@@ -8,6 +8,6 @@ import evaluations
 if __name__ == "__main__":
     # prepare_data.print_data_stat()
 
-    VERBOSE = True
+    VERBOSE = False
     MODE = 'test'
     evaluations.eval_perfomance_lbph_svm(MODE, VERBOSE)
