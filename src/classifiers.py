@@ -35,9 +35,9 @@ def call_svm(X_tune, y_tune, X_test, y_test, verbose=False, _mode='test'):
     if verbose : print (f"Predicted with accuracy:\t{accuracy*100}%")
 
     if _mode == 'test' and y_test[0] == y_pred_most:
-        return 1
+        return 1, accuracy
 
     if _mode == 'test' and  not stat_error: #and yet its a misclf.
         print (f'False prediction -- y_pred = {y_pred}\ty_test = {y_test[0]}')
-    return 0
+    return 0, accuracy
 

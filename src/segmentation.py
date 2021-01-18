@@ -24,7 +24,7 @@ def get_lines_coord(image):
 
     # closing
     kernel_closing = np.ones((5,200), np.uint8)
-    img_closing = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel_closing)
+    img_closing = cv2.morphologyEx(image, cv2.MORPH_CLOSE, kernel_closing)
     # opening
     kernel_opening = np.ones((1,200), np.uint8)
     img_opening = cv2.morphologyEx(img_closing, cv2.MORPH_OPEN, kernel_opening)

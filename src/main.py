@@ -51,9 +51,29 @@ if __name__ == "__main__":
     DEBUG = True
     MODE = 'test'
     #fetch data
-    while True:
+    tr = 0
+    pre = 0
+    acc = 0
+    trueacc = np.zeros(101)
+    falseacc = np.zeros(101)
+    allacc = np.zeros(101)
+    for i in range(500):
         train, test = prepare_data.fetch_data(mode=MODE, debug=DEBUG)
         X_tune, y_tune = preprocess_feature(train)
         X_test, y_test = preprocess_feature(test)
-        classifiers.call_svm(X_tune, y_tune, X_test, y_test, verbose=VERBOSE, _mode=MODE)
-        
+        pre, acc = classifiers.call_svm(X_tune, y_tune, X_test, y_test, verbose=VERBOSE, _mode=MODE)
+        tr += pre
+        acc = 100*acc + 0.5
+        allacc[int(acc)] += 1
+        if pre == 1:
+            trueacc[int(acc)] += 1
+        else:
+            falseacc[int(acc)] += 1
+    print(tr/5)
+    plt.plot(allacc)
+    plt.show()
+    plt.plot(trueacc)
+    plt.show()
+    plt.plot(falseacc)
+    plt.show()
+# 9/100     *       9/100       *       9/100       =       0.0729/100
