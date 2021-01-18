@@ -80,7 +80,7 @@ def step_3(X_tune, y_tune, X_test, y_test, verbose=False, _mode='test', clf='svm
          
 
 
-def pipe(feature='lbph', clf='adaboost', _mode='test', 
+def pipe(feature='lbph', clf='svm', _mode='test', 
             _verbose=False,pca_scatter=False,n_components=33):
     '''
         + This is the main function call for this file.
@@ -92,6 +92,7 @@ def pipe(feature='lbph', clf='adaboost', _mode='test',
     
     if _verbose: print ('\t\tPreprocess and FE..')
     
+    start_time = time.time()
     
     X_tune, y_tune = step_1(train,_verbose)
     X_test, y_test = step_1(test,_verbose)
@@ -102,23 +103,7 @@ def pipe(feature='lbph', clf='adaboost', _mode='test',
     
     if _verbose: print ('\t\tCLF..')
 
-    # start_time = time.time()
-    # pre_svm, acc_svm, best_svm = step_3(X_tune, y_tune, X_test, y_test, verbose=_verbose, _mode=_mode, clf='svm')
-    # print("USING SVM--- %s seconds ---" % (time.time() - start_time))
+    pre_svm, acc_svm, best_svm = step_3(X_tune, y_tune, X_test, y_test, verbose=_verbose, _mode=_mode, clf=clf)
     
-    start_time = time.time()
-    pre_ada, acc_ada, best_ada = step_3(X_tune, y_tune, X_test, y_test, verbose=_verbose, _mode=_mode, clf='adaboost')
-    print("USING ADA--- %s seconds ---" % (time.time() - start_time))
+    print(f"using {clf} --- {(time.time() - start_time)} seconds ---")
     
-    return best_ada, acc_ada, pre_ada
-    # if pca_scatter and pre_svm == 0: 
-    #     evaluations.plot_scatter_pca(X_tune, y_tune)
-
-    # if best_svm == best_svm:
-    #     return best_svm, pre_svm
-    # else:
-    #     if acc_svm >= acc_ada:
-    #         return best_svm, pre_svm
-    #     else:
-    #         return best_ada, pre_ada
-
