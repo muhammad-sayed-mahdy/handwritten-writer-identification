@@ -1,11 +1,43 @@
 #Global imports
 from global_imports import np, svm, mode, StatisticsError, KNeighborsClassifier, AdaBoostClassifier, DecisionTreeClassifier
 import random
+from collections import Counter
 #local imports
 
 
 
-def call_svm(X_tune, y_tune, X_test, y_test, verbose=False, _mode='test'):
+def score(y_pred, y_test=None, _verbose=False):
+    
+    confd = []
+    length = y_pred.shape[0]
+    
+    cs = Counter(y_pred)
+    best = cs.most_common(1)[0][0]
+
+    for i in range (3):
+        #0,1,2
+        confd.append(cs[i]/length)
+
+
+    if _verbose:
+        print (y_pred)
+        print (y_test)
+        
+    if y_test is None:
+        #Deliver mode
+        #returns: best result, conf_list, None
+        return best, confd, None
+    else:
+        #test mode
+        #returns: best result, conf_list, true/false
+        accuracy = np.sum(y_pred == y_test) / len(y_test)
+        if _verbose:
+            print(f'True Author: {y_test[0]}\tPred Author: {best}')
+            print (f"Predicted with accuracy:\t{accuracy*100}%")
+        return best, confd, (y_test[0]==best)
+
+
+def call_svm(X_tune, y_tune, X_test, y_test, _verbose=False, _mode='test'):
     '''
         + Our first classifier. SVM (support vector machine).
         + This aims to classify components based on a marginal error, to better separate data.
@@ -24,46 +56,19 @@ def call_svm(X_tune, y_tune, X_test, y_test, verbose=False, _mode='test'):
             accuracy: a float [0,1]
     '''
     #step 0: declare
-    clf = svm.SVC(kernel='poly', C=4000,gamma='scale', probability= True, degree=1, tol=1)
+    clf = svm.SVC(kernel='poly', C=4000,gamma='scale', probability= True, degree=1, tol=0.99)
     #step 1: fit
     clf.fit(X_tune, y_tune)
     #step 2: predict
     y_pred = clf.predict(X_test)
     #step 3: score
-    accuracy = np.sum(y_pred == y_test) / len(y_test)
-    
-    print (y_pred)
-    print (y_test)
-    #used in evaluations and verboses.
     if _mode == 'test':
-        y_pred_most = -1
-        stat_error = False
-        try:
-            y_pred_most =  (mode(y_pred))
-        except StatisticsError:
-            print (f'False prediction (equal values) -- y_pred = {y_pred}\ty_test = {y_test[0]}')
-            stat_error = True
+        return score(y_pred,y_test=y_test, _verbose=_verbose)
+    elif _mode == 'deliver':
+        return score(y_pred)
 
-        if verbose : print(f'True Author: {y_test[0]}\tPred Author: {y_pred_most}')
-        if verbose : print (f"Predicted with accuracy:\t{accuracy*100}%")
-    
-        if y_test[0] == y_pred_most:
-            confidence = (y_pred == y_pred_most).sum() / y_pred.shape[0]
-            return 1, confidence, y_pred_most
 
-        if not stat_error: #and yet its a misclf.
-            print (f'False prediction -- y_pred = {y_pred}\ty_test = {y_test[0]}')
-
-        y_rand = y_pred[0]
-        confidence = (y_pred == y_rand).sum() / y_pred.shape[0]
-
-        return 0, confidence, y_rand
-
-    #incase of training
-    if verbose : print (f"Predicted with accuracy:\t{accuracy*100}%")
-    return None, accuracy
-
-def call_adaboost(X_tune, y_tune, X_test, y_test, verbose=False, _mode='test'):
+def call_adaboost(X_tune, y_tune, X_test, y_test, _verbose=False, _mode='test'):
     # acrs = []
     # est_list = np.linspace(2,3.7,num=10)
     # for est in est_list:
@@ -72,39 +77,17 @@ def call_adaboost(X_tune, y_tune, X_test, y_test, verbose=False, _mode='test'):
     clf.fit(X_tune, y_tune)
     y_pred = clf.predict(X_test)
     accuracy = np.sum(y_pred == y_test) / len(y_test)
-    print (y_pred)
-    print (y_test)
-    #used in evaluations and verboses.
+    #step 3: score
     if _mode == 'test':
-        y_pred_most = -1
-        stat_error = False
-        try:
-            y_pred_most =  (mode(y_pred))
-        except StatisticsError:
-            print (f'False prediction (equal values) -- y_pred = {y_pred}\ty_test = {y_test[0]}')
-            stat_error = True
-
-        if verbose: print(f'True Author: {y_test[0]}\tPred Author: {y_pred_most}')
-        if verbose: print (f"Predicted with accuracy:\t{accuracy*100}%")
-    
-        if y_test[0] == y_pred_most:
-            confidence = (y_pred == y_pred_most).sum() / y_pred.shape[0]
-            return 1, confidence, y_pred_most
-
-        if not stat_error: #and yet its a misclf.
-            print (f'False prediction -- y_pred = {y_pred}\ty_test = {y_test[0]}')
-
-        y_rand = y_pred[0]
-        confidence = (y_pred == y_rand).sum() / y_pred.shape[0]
-        return 0, confidence, y_rand
+        return score(y_pred,y_test=y_test, _verbose=_verbose)
+    elif _mode == 'deliver':
+        return score(y_pred)
 
     # print (f'n_estimators: {estm}\t\t\tacc:{accuracy}')
     #     acrs.append(accuracy)
     # return acrs
 
-
-
-def call_knn(X_tune, y_tune, X_test, y_test, verbose=False, _mode='test'):
+def call_knn(X_tune, y_tune, X_test, y_test, _verbose=False, _mode='test'):
     '''
         + Our second classifier. KNN (K-Nearest Neighbour).
         + This aims to classify components according to the nearest k samples.
@@ -126,29 +109,7 @@ def call_knn(X_tune, y_tune, X_test, y_test, verbose=False, _mode='test'):
     #step 2: predict
     y_pred = neigh.predict(X_test)
     #step 3: score
-    accuracy = np.sum(y_pred == y_test) / len(y_test)
-
-    #used in evaluations and verboses.
     if _mode == 'test':
-        y_pred_most = -1
-        stat_error = False
-        try:
-            y_pred_most =  (mode(y_pred))
-        except StatisticsError:
-            print (f'False prediction (equal values) -- y_pred = {y_pred}\ty_test = {y_test[0]}')
-            stat_error = True
-
-        if verbose : print(f'True Author: {y_test[0]}\tPred Author: {y_pred_most}')
-        if verbose : print (f"Predicted with accuracy:\t{accuracy*100}%")
-    
-        if y_test[0] == y_pred_most:
-            return 1, accuracy
-
-        if not stat_error: #and yet its a misclf.
-            print (f'False prediction -- y_pred = {y_pred}\ty_test = {y_test[0]}')
-
-        return 0, accuracy
-
-    #incase of training
-    if verbose : print (f"Predicted with accuracy:\t{accuracy*100}%")
-    return None, accuracy
+        return score(y_pred,y_test=y_test, _verbose=_verbose)
+    elif _mode == 'deliver':
+        return score(y_pred)

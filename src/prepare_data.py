@@ -3,7 +3,7 @@ import os, random
 #local imports
 
 
-def fetch_data(random_authors=3, number_train_forms=2, number_test_forms=1, mode='train', debug = False):
+def fetch_data(random_authors=3, number_train_forms=2, number_test_forms=1, _mode='train', debug = False):
     '''
         + This function is responsible for fetching random images for the system
         to be tuned.
@@ -11,9 +11,9 @@ def fetch_data(random_authors=3, number_train_forms=2, number_test_forms=1, mode
             random_authors : # of authors to be fetched.
             number_train_forms: # of train forms to get from them.
             number_test_forms: # of ...
-            mode: if `train` .. you may tune the above parameters, if `test` they will be adjsuted to (3,2,1)
+            _mode: if `train` .. you may tune the above parameters, if `test` they will be adjsuted to (3,2,1)
     '''
-    if mode == 'train':
+    if _mode == 'train':
         data_path = 'data/'
 
         datas = os.listdir(data_path)
@@ -43,7 +43,7 @@ def fetch_data(random_authors=3, number_train_forms=2, number_test_forms=1, mode
             test_paths.append(user_i_test)
         return train_paths, test_paths
         
-    elif mode == 'test':
+    elif _mode == 'test':
         data_path = 'data/' 
 
         datas = os.listdir(data_path)
