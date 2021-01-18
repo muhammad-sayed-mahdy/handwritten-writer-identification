@@ -77,3 +77,17 @@ def eval_pca(VERBOSE=True):
         trials += 1
         print (f'Trial: {trials}\tCorrects: {correct}\tConf: {conf}\tOverall: {correct/trials}')
         
+
+def eval_ada(VERBOSE=True):
+    
+    acr = np.zeros(10)
+    for _ in range (100):
+        pre, conf = pipeline.pipe(feature='lbph', clf='adaboost',_mode='test', 
+            _verbose=VERBOSE)
+        acr += (pre)
+    
+    est_list = np.linspace(2,3.7,num=10)
+    plt.bar(est_list,acr)
+    plt.show()
+    plt.savefig('graphs/ada_n_estimators.png')
+        

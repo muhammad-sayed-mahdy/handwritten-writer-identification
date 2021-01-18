@@ -45,27 +45,25 @@ def step_1(paths, VERBOSE=False):
                 X_list.append(hist_of_line)
                 y_list.append(author_i)
             
-        print (f'Author: {author_i}\t #lines: {lines_count}')
+        if VERBOSE: print (f'Author: {author_i}\t #lines: {lines_count}')
     if VERBOSE: print(f'X shape:\t{len(X_list) , len(X_list[0])}')
     return np.array(X_list),np.array(y_list)
 
-def step_2(X_tune, X_test, y_tune,verbose=False,n_components=2):
+def step_2(X_tune, X_test, y_tune,verbose=False,n_components=33):
     #scale
     sc = StandardScaler()
     X_tune = sc.fit_transform(X_tune)
     X_test = sc.transform(X_test)
     #pca
-    # n_components = X_tune.shape[0]-1
-    n_components = 30
-    
-    print (f'N_cmp: {n_components}')
+    n_components = min(33,X_tune.shape[0]-1)
+    if verbose: print (f'N_cmp: {n_components}')
         
     pca = PCA(n_components=n_components, copy=False)
     X_tune = pca.fit_transform(X_tune)
     X_test = pca.transform(X_test)
     if verbose: print (f'New Shapes: X_tune: {X_tune.shape}\ty_tune: {y_tune.shape}')
-    if verbose: print(pca.explained_variance_ratio_)
-    if verbose: print(pca.singular_values_)
+    # if verbose: print(pca.explained_variance_ratio_)
+    # if verbose: print(pca.singular_values_)
     return X_tune, X_test
 
 def step_3(X_tune, y_tune, X_test, y_test, verbose=False, _mode='test', clf='svm'):
@@ -76,30 +74,51 @@ def step_3(X_tune, y_tune, X_test, y_test, verbose=False, _mode='test', clf='svm
     if clf == 'svm':
         return classifiers.call_svm(X_tune, y_tune, X_test, y_test, 
                     verbose=verbose, _mode=_mode)
+    elif clf == 'adaboost':
+        return classifiers.call_adaboost(X_tune, y_tune, X_test, y_test, 
+                    verbose=verbose, _mode=_mode)
+         
 
 
-def pipe(feature='lbph', clf='svm', _mode='test', 
-            _verbose=False,pca_scatter=False,n_components=2):
+def pipe(feature='lbph', clf='adaboost', _mode='test', 
+            _verbose=False,pca_scatter=False,n_components=33):
     '''
         + This is the main function call for this file.
         + It specifies which feature ext. technique and which classifier to be used.
     '''
     if _verbose: print ('\n\t\tFetch..')
+    
     train, test = step_0(_mode=_mode)
+    
     if _verbose: print ('\t\tPreprocess and FE..')
     
-    start_time = time.time()
     
     X_tune, y_tune = step_1(train,_verbose)
     X_test, y_test = step_1(test,_verbose)
-    if _verbose: print ('\t\tPCA..')
-    X_tune,X_test = step_2(X_tune,X_test,y_tune, verbose=_verbose,n_components=n_components)
-    if _verbose: print ('\t\tCLF..')
-    pre, acc = step_3(X_tune, y_tune, X_test, y_test, verbose=_verbose, _mode=_mode, clf=clf)
-    if pca_scatter and pre == 0: 
-        evaluations.plot_scatter_pca(X_tune, y_tune)
-
-    print("--- %s seconds ---" % (time.time() - start_time))
-
     
-    return pre, acc
+    if _verbose: print ('\t\tPCA..')
+    
+    X_tune,X_test = step_2(X_tune,X_test,y_tune, verbose=_verbose,n_components=n_components)
+    
+    if _verbose: print ('\t\tCLF..')
+
+    # start_time = time.time()
+    # pre_svm, acc_svm, best_svm = step_3(X_tune, y_tune, X_test, y_test, verbose=_verbose, _mode=_mode, clf='svm')
+    # print("USING SVM--- %s seconds ---" % (time.time() - start_time))
+    
+    start_time = time.time()
+    pre_ada, acc_ada, best_ada = step_3(X_tune, y_tune, X_test, y_test, verbose=_verbose, _mode=_mode, clf='adaboost')
+    print("USING ADA--- %s seconds ---" % (time.time() - start_time))
+    
+    return best_ada, acc_ada, pre_ada
+    # if pca_scatter and pre_svm == 0: 
+    #     evaluations.plot_scatter_pca(X_tune, y_tune)
+
+    # if best_svm == best_svm:
+    #     return best_svm, pre_svm
+    # else:
+    #     if acc_svm >= acc_ada:
+    #         return best_svm, pre_svm
+    #     else:
+    #         return best_ada, pre_ada
+
