@@ -2,10 +2,10 @@
 from global_imports import cv2, np
 
 #local imports
-import features
-import preprocessing
-import prepare_data
-import classifiers
+import prepare_data     #step 0
+import preprocessing    #step 1.1
+import features         #step 1.2
+import classifiers      #step 2
 
 def step_0(_mode):
     '''
@@ -48,8 +48,13 @@ def step_1(paths, VERBOSE=False):
     if VERBOSE: print(f'X shape:\t{len(X_list) , len(X_list[0])}')
     return np.array(X_list),np.array(y_list)
 
-def step_2(X_tune, y_tune, X_test, y_test, verbose=False, _mode='test'):
-   return classifiers.call_svm(X_tune, y_tune, X_test, y_test, verbose=verbose, _mode=_mode)
+def step_2(X_tune, y_tune, X_test, y_test, verbose=False, _mode='test', clf='svm'):
+    '''
+        + For now it's just a calling function, but later on, this will be passed the classifier technique
+        used. and choose from it.
+    '''
+    if clf == 'svm':
+        return classifiers.call_svm(X_tune, y_tune, X_test, y_test, verbose=verbose, _mode=_mode)
 
 
 def pipe(feature='lbph', clf='svm', _mode='test', _verbose=False):
@@ -60,5 +65,5 @@ def pipe(feature='lbph', clf='svm', _mode='test', _verbose=False):
     train, test = step_0(_mode=_mode)
     X_tune, y_tune = step_1(train,_verbose)
     X_test, y_test = step_1(test,_verbose)
-    pre, acc = step_2(X_tune, y_tune, X_test, y_test, verbose=_verbose, _mode=_mode)
+    pre, acc = step_2(X_tune, y_tune, X_test, y_test, verbose=_verbose, _mode=_mode, clf=clf)
     return pre, acc
