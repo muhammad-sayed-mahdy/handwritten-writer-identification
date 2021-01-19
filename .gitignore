@@ -129,7 +129,9 @@ dmypy.json
 .pyre/
 
 .vscode
-data
+data_tune
 Main.ipynb
 graphs/pca/failed
 data_ex
+data_test
+data

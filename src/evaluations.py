@@ -64,20 +64,20 @@ def plot_scatter_pca(X_tune, y_tune):
                         loc="lower left", title="Classes")
     ax.add_artist(legend1)
     # plt.show()
-    name= 'graphs/pca/failed/pca_'+str(random.randint(0,100))+'.png'
+    name= 'graphs/pca/failed/pca'
     plt.savefig(name)
     plt.clf()
 
 def eval_pca(VERBOSE=True):
     trials = 0
     total_correct = 0
-    n_comp = 50
+    n_comp = 2
     for _ in range(2000):
-        pre, conf, correct = pipeline.pipe(feature='lbph', clf='svm',_mode='test', 
-            _verbose=VERBOSE, pca_scatter=False, n_components=n_comp)
+        correct = pipeline.pipe(feature='cslbcop', clf='svm',_mode='test', 
+            _verbose=VERBOSE, pca_scatter=True, n_components=n_comp)
         total_correct += correct
         trials += 1
-        print (f'Trial: {trials}\tCorrects: {total_correct}\tConf: {conf}\tOverall: {total_correct/trials}')
+        print (f'Trial: {trials}\tCorrects: {total_correct}\tOverall: {total_correct/trials}')
         
 
 def eval_ada(VERBOSE=True):
@@ -146,7 +146,7 @@ def final_eval(_mode='test', _verbose=True):
         forms = os.listdir(data_path+auth)
         for form_id in range(form_count):
             itr += 1
-            res = pipeline.pipe(feature='cslbcop', clf='svm',_verbose=_verbose, _mode=_mode,set_id=set_id, form_id=form_id)
+            res = pipeline.pipe(feature='cslbcop', clf='adaboost',_verbose=_verbose, _mode=_mode,set_id=set_id, form_id=form_id)
             if not res: failed += 1
             print(f'Trial: {itr}\tFailed: {failed}\tauthor: {set_id} \tform: {form_id}\n\n')
             

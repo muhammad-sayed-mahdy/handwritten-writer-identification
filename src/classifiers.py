@@ -14,7 +14,7 @@ def score(y_pred, y_test=None, _verbose=False):
     cs = Counter(y_pred)
     best = cs.most_common(1)[0][0]
 
-    for i in range (3):
+    for i in range (1,4):
         #0,1,2
         confd.append(cs[i]/length)
 
@@ -26,6 +26,8 @@ def score(y_pred, y_test=None, _verbose=False):
     if y_test is None:
         #Deliver mode
         #returns: best result, conf_list, None
+        print(y_pred)
+        print (confd)
         return best, confd, None
     else:
         #test mode
@@ -56,7 +58,7 @@ def call_svm(X_tune, y_tune, X_test, y_test, _verbose=False, _mode='test'):
             accuracy: a float [0,1]
     '''
     #step 0: declare
-    clf = svm.SVC(kernel='poly', C=4000,gamma='scale', probability= True, degree=1, tol=0.99)
+    clf = svm.SVC(kernel='poly', C=4000,gamma='scale', probability= True, degree=1, tol=0.9999)
     #step 1: fit
     clf.fit(X_tune, y_tune)
     #step 2: predict
@@ -73,7 +75,7 @@ def call_adaboost(X_tune, y_tune, X_test, y_test, _verbose=False, _mode='test'):
     # est_list = np.linspace(2,3.7,num=10)
     # for est in est_list:
     #     estm = int(pow(10,est))
-    clf = AdaBoostClassifier(DecisionTreeClassifier(max_depth=1), n_estimators = 300)
+    clf = AdaBoostClassifier(DecisionTreeClassifier(max_depth=1), n_estimators = 200)
     clf.fit(X_tune, y_tune)
     y_pred = clf.predict(X_test)
     #step 3: score

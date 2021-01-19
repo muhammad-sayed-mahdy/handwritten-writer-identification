@@ -52,9 +52,19 @@ data/341/g06-047j.png       (TWICE)
 
 data/153/c03-021d.png       (TWICE)
 
-data/000/a01-132x.png
+data/000/a01-132x.png       (TWICE)
 
-data/000/a01-049x.png
+data/000/a01-049x.png       (THIRD)
 
-data/242/e04-114.png
+data/242/e04-114.png        only this file fails!
+
+--------------------------------------
+
+data/555/n01-031.png        The ugly one
+
+data/114/b04-202.png
+
+data/114/b04-208.png
+
+data/243/e04-124.png
 
