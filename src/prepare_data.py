@@ -4,9 +4,27 @@ import os, random, shutil
 
 
 
+def fetch_deliver(test_folder):
+    
+    train_paths = []
+    test_paths = []
+    test_cases = os.listdir('data/'+test_folder)
+    test_cases = sorted(test_cases)
+    for test_case in test_cases:
+        if test_case == 'test.png':
+            test_paths.append('data/'+test_folder+'/test.png') 
+            print ('data/'+test_folder+'/test.png')   
+        else:
+            forms = os.listdir('data/'+test_folder+'/'+test_case)
+            forms = sorted(forms)
+            for form in forms:
+                train_paths.append('data/'+test_folder+'/'+test_case+'/'+form)
+                print ('data/'+test_folder+'/'+test_case+'/'+form)
+
+    return train_paths, test_paths
 
 def read_brute(set_id,form_id):
-    data_path = 'data/' 
+    data_path = 'data_tune/' 
 
     datas = os.listdir(data_path)
     train_paths = []
@@ -68,7 +86,7 @@ def fetch_data(random_authors=3, number_train_forms=2, number_test_forms=1, _mod
         return read_brute(set_id,form_id)
 
     if _mode == 'train':
-        data_path = 'data/'
+        data_path = 'data_tune/'
 
         datas = os.listdir(data_path)
         train_paths = []
@@ -98,7 +116,7 @@ def fetch_data(random_authors=3, number_train_forms=2, number_test_forms=1, _mod
         return train_paths, test_paths
         
     elif _mode == 'test':
-        data_path = 'data/' 
+        data_path = 'data_tune/' 
 
         datas = os.listdir(data_path)
         train_paths = []
@@ -155,9 +173,9 @@ def print_data_stat():
 def move_extras():
     if not os.path.exists('data_ex'):
         os.mkdir('data_ex')
-    data_folders = os.listdir('data/')
+    data_folders = os.listdir('data_tune/')
     for data_folder in data_folders:
-        folder_path = 'data/'+data_folder
+        folder_path = 'data_tune/'+data_folder
         new_path = 'data_ex/'+data_folder
         if len(os.listdir(folder_path)) < 3:
             #move it aways
@@ -167,7 +185,7 @@ def move_extras():
 
 def data_stat_new(): #899
     count = 0
-    datas = os.listdir('data/')
+    datas = os.listdir('data_tune/')
     for data in datas:
-        count += len(os.listdir('data/'+data))
+        count += len(os.listdir('data_tune/'+data))
     print (count)

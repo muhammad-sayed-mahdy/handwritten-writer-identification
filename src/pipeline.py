@@ -1,5 +1,5 @@
 #global imports
-from global_imports import cv2, np, PCA, StandardScaler, Image
+from global_imports import cv2, np, PCA, StandardScaler, Image, shuffle
 import time, os, random
 #local imports
 import prepare_data     #step 0
@@ -8,14 +8,14 @@ import features         #step 1.2
 import classifiers      #step 2
 import evaluations
 
-def step_0(_mode = 'test', _verbose=False, set_id = None,form_id=None):
+def step_0(_mode = 'test', _verbose=False, set_id = None,form_id=None,test_folder=None):
     '''
         + Fetches random images for either training or testing.
     '''
+    test_label = None
+    train_images, test_images = [],[]
     if _mode == 'test':
         train_paths, test_paths = prepare_data.fetch_data(_mode=_mode,set_id=set_id,form_id=form_id)
-        train_images, test_images = [],[]
-        test_label = None
         #READ TRAIN
         for author_i, tr in enumerate(train_paths):
             for _, image_path in enumerate(tr):
@@ -27,12 +27,16 @@ def step_0(_mode = 'test', _verbose=False, set_id = None,form_id=None):
                 image = cv2.imread(tr[0])
                 test_images.append(image)
                 test_label = author_i
-    
-        return train_images, test_images, test_label, train_paths, test_paths
 
     elif _mode == 'deliver':
-        pass
-    
+        train_paths, test_paths = prepare_data.fetch_deliver(test_folder)
+        test_images.append(cv2.imread(test_paths[0]))
+        for author_i, image_path in enumerate(train_paths):
+            image = cv2.imread(image_path)
+            train_images.append(image)
+
+    return train_images, test_images, test_label, train_paths, test_paths
+
 
         
         
@@ -71,14 +75,14 @@ def step_1(images, VERBOSE=False, test_label=None, feat = 'cslbcop'):
             lines_count += 1
             X_list.append(hist_of_line)
             if test_label is None:
-                y_list.append(author_i//2)
+                y_list.append((author_i//2) + 1)
             else:
                 y_list.append(test_label)
         if VERBOSE: print (f'Author: {author_i//2}\t #lines: {lines_count}')
     if VERBOSE: print(f'X shape:\t{len(X_list) , len(X_list[0])}')
     return np.array(X_list), np.array(y_list)
 
-def step_2(X_tune, X_test, y_tune,_verbose=False,n_components=33):
+def step_2(X_tune, X_test, y_tune,_verbose=False,n_components=33,pca_scatter=False):
     #scale
     sc = StandardScaler()
     X_tune = sc.fit_transform(X_tune)
@@ -93,6 +97,8 @@ def step_2(X_tune, X_test, y_tune,_verbose=False,n_components=33):
     X_test = pca.transform(X_test)
 
     if _verbose: print (f'New Shapes: X_tune: {X_tune.shape}\ty_tune: {y_tune.shape}')
+    if pca_scatter:
+        evaluations.plot_scatter_pca(X_tune,y_tune)
     # if _verbose: print(pca.explained_variance_ratio_)
     # if _verbose: print(pca.singular_values_)
     
@@ -117,14 +123,14 @@ def step_3(X_tune, y_tune, X_test, y_test, _verbose=False, _mode='test', clf='sv
 
 def pipe(feature='cslbcop', clf='svm', _mode='test', 
             _verbose=False,pca_scatter=False,n_components=33,
-            set_id=None,form_id=None):
+            set_id=None,form_id=None, test_folder=None):
     '''
         + This is the main function call for this file.
         + It specifies which feature ext. technique and which classifier to be used.
     '''
     if _verbose: print ('\n\t\tFetch..')
     
-    train_images, test_images, test_label, train_paths, test_paths = step_0(_mode=_mode,set_id=set_id,form_id=form_id)
+    train_images, test_images, test_label, train_paths, test_paths = step_0(_mode=_mode,set_id=set_id,form_id=form_id,test_folder=test_folder)
     
     if _verbose: print ('\t\tPreprocess and FE..')
     start_time = time.time()
@@ -134,8 +140,10 @@ def pipe(feature='cslbcop', clf='svm', _mode='test',
     
     if _verbose: print ('\t\tPCA..')
     
-    X_tune,X_test = step_2(X_tune,X_test,y_tune, _verbose=_verbose,n_components=n_components)
-    
+    X_tune,X_test = step_2(X_tune,X_test,y_tune, _verbose=_verbose,n_components=n_components,pca_scatter=pca_scatter)
+
+    #shuffle
+    X_tune, y_tune = shuffle(X_tune, y_tune )
     if _verbose: print ('\t\tCLF..')
     
     #best_result, conf_list, correct
@@ -147,10 +155,11 @@ def pipe(feature='cslbcop', clf='svm', _mode='test',
         if not res:
             print (f'FAIL: confd_list: {confd_list}')
             evaluations.show_damage(train_paths, test_paths)
+        return res
     else:
         #deliver
         best_svm, conf_svm, _ = step_3(X_tune, y_tune, X_test, y_test=None,_verbose=_verbose, _mode=_mode, clf='svm')
-        if max(conf_svm) < 0.7: #svm not so sure..
+        if max(conf_svm) <= 0.5: #svm not so sure..
             #try ada and knn
             best_ada, conf_ada, _ = step_3(X_tune, y_tune, X_test, y_test=None,_verbose=_verbose, _mode=_mode, clf='adaboost')
             # best_knn, conf_knn, _ = step_3(X_tune, y_tune, X_test, y_test=None,_verbose=_verbose, _mode=_mode, clf='knn')
@@ -161,25 +170,16 @@ def pipe(feature='cslbcop', clf='svm', _mode='test',
                 if c > max_val:
                     max_val = c
                     best = i
-            print(f"--- {(time.time() - start_time)} seconds ---")
-            if _verbose: print (f'PICKED {best}\t\tTrue: {y_test[0]}')
-            if not(best==y_test[0]):
-                # evaluations.show_damage(train_paths, test_paths)
-                f = open('bad_results.txt', "a+")
-                for tt in test_paths:
-                    if len(tt) > 0:
-                        f.write(tt[0])
-                        f.write('\n\n')
-            return (best==y_test[0])
+            end_time = time.time() - start_time
+            print(f"--- {end_time} seconds ---")
+            if _verbose: print (f'PICKED {best}')
+            
+            return best_ada,end_time
         else:
-            print(f"--- {(time.time() - start_time)} seconds ---")
-            if _verbose: print (f'PICKED {best_svm}\t\tTrue: {y_test[0]}')
-            if not(best_svm==y_test[0]):
-                # evaluations.show_damage(train_paths, test_paths)
-                f = open('bad_results.txt', "a+")
-                for tt in test_paths:
-                    if len(tt) > 0:
-                        f.write(tt[0])
-                        f.write('\n\n')
-            return (best_svm==y_test[0])
+            
+            end_time = time.time() - start_time
+            print(f"--- {end_time} seconds ---")
+            if _verbose: print (f'PICKED {best_svm}')
+            
+            return best_svm,end_time
     
