@@ -69,8 +69,9 @@ def LTPH(img, thres = 5, xgrid = 1, ygrid = 8):
             
 def freq_hist(img, rad = 1, p=8):
     img_freq = np.log(np.abs(np.fft.fft2(a=img)))
-    mx = np.max(img_freq)
     img_freq /= 10
     img_freq[img_freq > 1] = 1
-    img_freq *= 255
-    return LPBH(img_freq, rad=rad, p=p)
+    img_freq *= 127
+    img_freq = np.uint8(img_freq)
+    histogram = cv2.calcHist([img_freq],[0],None,[128],[0,128])
+    return histogram.flatten()
