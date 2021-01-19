@@ -17,7 +17,7 @@ if __name__ == "__main__":
     MODE = 'deliver'
     data_path = 'data/'
     test_folders = os.listdir(data_path)
-    test_folders = sorted(test_folders)
+    test_folders = sorted(test_folders,key=int)
     if os.path.exists('results.txt'):
         os.remove('results.txt')
     if os.path.exists('time.txt'):
