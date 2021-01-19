@@ -1,0 +1,184 @@
+failed 2
+
+Author: 0        #lines: 8
+Author: 0        #lines: 9
+Author: 1        #lines: 8
+Author: 1        #lines: 7
+Author: 2        #lines: 7
+Author: 2        #lines: 10
+X shape:        (49, 4096)
+Author: 0        #lines: 8
+X shape:        (8, 4096)
+                PCA..
+N_cmp: 48
+New Shapes: X_tune: (49, 48)    y_tune: (49,)
+                CLF..
+[1 1 2 1 2 2 1 2]
+[2 2 2 2 2 2 2 2]
+True Author: 2  Pred Author: 1
+Accuracy:       50.0%
+using svm --- 2.9353911876678467 seconds ---
+FAILED: confd_list: [0.0, 0.5, 0.5]
+[['data/019/a01-122.png', 'data/019/a01-128.png'], ['data/025/a02-024.png', 'data/025/a02-020.png'], ['data/181/d01-118.png', 'data/181/e01-055.png']]
+[[], [], ['data/181/d01-123.png']]
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+failed 3
+
+Author: 0        #lines: 8
+Author: 0        #lines: 9
+Author: 1        #lines: 10
+Author: 1        #lines: 9
+Author: 2        #lines: 11
+Author: 2        #lines: 8
+X shape:        (55, 4096)
+Author: 0        #lines: 11
+X shape:        (11, 4096)
+                PCA..
+N_cmp: 54
+New Shapes: X_tune: (55, 54)    y_tune: (55,)
+                CLF..
+[1 1 1 1 1 1 1 1 1 1 1]
+[2 2 2 2 2 2 2 2 2 2 2]
+True Author: 2  Pred Author: 1
+Accuracy:       0.0%
+using svm --- 2.1766581535339355 seconds ---
+FAILED: confd_list: [0.0, 1.0, 0.0]
+[['data/585/n04-149.png', 'data/585/n04-156.png'], ['data/063/a04-089.png', 'data/063/a04-081.png'], ['data/353/g07-044.png', 'data/353/g07-042.png']]
+[[], [], ['data/353/g07-038.png']]
+
+----------------------------------------------------
+failed 1
+
+Author: 0        #lines: 6
+Author: 0        #lines: 7
+Author: 1        #lines: 7
+Author: 1        #lines: 7
+Author: 2        #lines: 13
+Author: 2        #lines: 10
+X shape:        (50, 4096)
+Author: 0        #lines: 3
+X shape:        (3, 4096)
+                PCA..
+N_cmp: 39
+New Shapes: X_tune: (50, 39)    y_tune: (50,)
+                CLF..
+[2 1 2]
+[1 1 1]
+True Author: 1  Pred Author: 2
+Accuracy:       33.33333333333333%
+using svm --- 2.422391176223755 seconds ---
+FAILED: confd_list: [0.0, 0.3333333333333333, 0.6666666666666666]
+[['data/340/g06-026i.png', 'data/340/g06-031i.png'], ['data/350/g07-003b.png', 'data/350/g07-007b.png'], ['data/456/k07-176.png', 'data/456/k07-158.png']]
+[[], ['data/350/g07-014b.png'], []]
+
+----------------------------------------------
+failed 1
+
+Author: 0        #lines: 9
+Author: 0        #lines: 10
+Author: 1        #lines: 3
+Author: 1        #lines: 4
+Author: 2        #lines: 7
+Author: 2        #lines: 9
+X shape:        (42, 4096)
+Author: 0        #lines: 9
+X shape:        (9, 4096)
+                PCA..
+N_cmp: 39
+New Shapes: X_tune: (42, 39)    y_tune: (42,)
+                CLF..
+[0 0 1 0 0 0 0 0 1]
+[1 1 1 1 1 1 1 1 1]
+True Author: 1  Pred Author: 0
+Accuracy:       22.22222222222222%
+using svm --- 1.9035894870758057 seconds ---
+FAILED: confd_list: [0.7777777777777778, 0.2222222222222222, 0.0]
+[['data/117/b05-038.png', 'data/117/b05-045.png'], ['data/000/a05-121.png', 'data/000/a05-116.png'], ['data/344/g06-026m.png', 'data/344/g06-050m.png']]
+[[], ['data/000/a01-063u.png'], []]
+
+----------------------------------------------
+Author: 0        #lines: 11
+Author: 0        #lines: 8
+Author: 1        #lines: 11
+Author: 1        #lines: 11
+Author: 2        #lines: 7
+Author: 2        #lines: 7
+X shape:        (55, 4096)
+Author: 0        #lines: 11
+X shape:        (11, 4096)
+                PCA..
+N_cmp: 39
+New Shapes: X_tune: (55, 39)    y_tune: (55,)
+                CLF..
+[2 2 1 1 1 1 1 1 1 1 1]
+[0 0 0 0 0 0 0 0 0 0 0]
+True Author: 0  Pred Author: 1
+Accuracy:       0.0%
+using svm --- 1.6096079349517822 seconds ---
+FAILED: confd_list: [0.0, 0.8181818181818182, 0.18181818181818182]
+[['data/353/g07-044.png', 'data/353/g07-042.png'], ['data/567/p03-087.png', 'data/567/p03-096.png'], ['data/087/b01-009.png', 'data/087/b01-004.png']]
+[['data/353/g07-038.png'], [], []]
+
+
+----------------------------------------------
+[['data/545/m04-061.png', 'data/545/m04-038.png'], ['data/126/b06-110.png', 'data/126/b06-036.png'], ['data/181/d01-118.png', 'data/181/e01-055.png']]
+[[], [], ['data/181/d01-123.png']]
+----------------------------------------------
+[['data/550/m04-238.png', 'data/550/m04-231.png'], ['data/333/g06-026b.png', 'data/333/g06-031b.png'], ['data/555/n01-020.png', 'data/555/n01-045.png']]
+[[], [], ['data/555/n01-031.png']]
+----------------------------------------------
+[['data/333/g06-026b.png', 'data/333/g06-031b.png'], ['data/353/g07-044.png', 'data/353/g07-042.png'], ['data/085/a06-134.png', 'data/085/a06-124.png']]
+[[], ['data/353/g07-038.png'], []]      122
+----------------------------------------------
+[['data/497/l07-135.png', 'data/497/l07-118.png'], ['data/350/g07-003b.png', 'data/350/g07-007b.png'], ['data/109/b04-060.png', 'data/109/b04-054.png']]
+[[], ['data/350/g07-014b.png'], []]     66 [2,1,2]
+----------------------------------------------
+[['data/158/e04-000.png', 'data/158/c04-013.png'], ['data/131/c06-095.png', 'data/131/c06-058.png'], ['data/111/b04-128.png', 'data/111/b04-107.png']]
+[['data/158/c04-008.png'], [], []]      100
+----------------------------------------------
+Author: 0        #lines: 11
+Author: 0        #lines: 8
+Author: 1        #lines: 8
+Author: 1        #lines: 11
+Author: 2        #lines: 8
+Author: 2        #lines: 9
+X shape:        (55, 4096)
+Author: 0        #lines: 11
+X shape:        (11, 4096)
+                PCA..
+N_cmp: 39
+New Shapes: X_tune: (55, 39)    y_tune: (55,)
+                CLF..
+[2 2 2 2 1 2 1 2 1 1 1]
+None
+[1 1 1 1 1 1 1 1 1 1 1]
+None
+--- 2.334789991378784 seconds ---
+PICKED 1                True: 0
+[['data/353/g07-044.png', 'data/353/g07-042.png'], ['data/339/g06-031h.png', 'data/339/g06-037h.png'], ['data/392/h07-075a.png', 'data/392/h07-078a.png']]
+[['data/353/g07-038.png'], [], []]      the worst yet
+----------------------------------------------
+
+----------------------------------------------
+----------------------------------------------
+
+----------------------------------------------
+----------------------------------------------
+
+----------------------------------------------
+----------------------------------------------
+
+----------------------------------------------
+----------------------------------------------
+
+----------------------------------------------
+----------------------------------------------
+
+----------------------------------------------
+----------------------------------------------
+
+----------------------------------------------
+----------------------------------------------
+
+----------------------------------------------
