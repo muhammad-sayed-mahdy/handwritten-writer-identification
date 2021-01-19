@@ -13,7 +13,7 @@ if __name__ == "__main__":
     # while True:
     #     evaluations.seperable()
     
-    VERBOSE = True
+    VERBOSE = False
     MODE = 'deliver'
     data_path = 'data/'
     test_folders = os.listdir(data_path)

@@ -13,13 +13,13 @@ def fetch_deliver(test_folder):
     for test_case in test_cases:
         if test_case == 'test.png':
             test_paths.append('data/'+test_folder+'/test.png') 
-            print ('data/'+test_folder+'/test.png')   
+            # print ('data/'+test_folder+'/test.png')   
         else:
             forms = os.listdir('data/'+test_folder+'/'+test_case)
             forms = sorted(forms)
             for form in forms:
                 train_paths.append('data/'+test_folder+'/'+test_case+'/'+form)
-                print ('data/'+test_folder+'/'+test_case+'/'+form)
+                # print ('data/'+test_folder+'/'+test_case+'/'+form)
 
     return train_paths, test_paths
 
