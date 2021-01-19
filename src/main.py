@@ -11,7 +11,7 @@ if __name__ == "__main__":
     # evaluations.eval_ada()
     # evaluations.eval_pca(VERBOSE)
     # while True:
-    #     evaluations.final_eval()
+    #     evaluations.seperable()
     
     VERBOSE = True
     MODE = 'deliver'
