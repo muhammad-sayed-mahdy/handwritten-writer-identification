@@ -10,10 +10,10 @@ if __name__ == "__main__":
     # evaluations.eval_perfomance_lbph_svm(MODE, VERBOSE)
     # evaluations.eval_ada()
     # evaluations.eval_pca(VERBOSE)
-    while True:
-        evaluations.final_eval()
+    # while True:
+    #     evaluations.seperable()
     
-    VERBOSE = True
+    VERBOSE = False
     MODE = 'deliver'
     data_path = 'data/'
     test_folders = os.listdir(data_path)

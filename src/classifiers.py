@@ -26,8 +26,8 @@ def score(y_pred, y_test=None, _verbose=False):
     if y_test is None:
         #Deliver mode
         #returns: best result, conf_list, None
-        print(y_pred)
-        print (confd)
+        if _verbose: print(y_pred)
+        if _verbose: print (confd)
         return best, confd, None
     else:
         #test mode

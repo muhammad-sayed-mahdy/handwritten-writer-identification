@@ -172,14 +172,14 @@ def pipe(feature='cslbcop', clf='svm', _mode='test',
                     max_val = c
                     best = i
             end_time = time.time() - start_time
-            print(f"--- {end_time} seconds ---")
+            if _verbose: print(f"--- {end_time} seconds ---")
             if _verbose: print (f'PICKED {best}')
             
             return best_ada,end_time
         else:
             
             end_time = time.time() - start_time
-            print(f"--- {end_time} seconds ---")
+            if _verbose: print(f"--- {end_time} seconds ---")
             if _verbose: print (f'PICKED {best_svm}')
             
             return best_svm,end_time
