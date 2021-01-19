@@ -21,3 +21,4 @@ if __name__ == "__main__":
         if res: correct += 1
         trials += 1
         print (f'Trial: {trials}\t\tCorrect: {correct}\t\tOverall: {correct/trials}')
+        
