@@ -10,8 +10,8 @@ if __name__ == "__main__":
     # evaluations.eval_perfomance_lbph_svm(MODE, VERBOSE)
     # evaluations.eval_ada()
     # evaluations.eval_pca(VERBOSE)
-    while True:
-        evaluations.final_eval()
+    # while True:
+    #     evaluations.final_eval()
     
     VERBOSE = True
     MODE = 'deliver'
