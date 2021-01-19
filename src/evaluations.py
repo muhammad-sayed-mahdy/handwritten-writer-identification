@@ -24,7 +24,7 @@ def eval_perfomance_lbph_svm(MODE, VERBOSE=False):
     avgrtconv = 0
     predicted =-1
     cnt = 0
-    for i in range(100):
+    for i in range(2000):
         print("Iteration: ", i+1)
         predicted, conf, pre = pipeline.pipe(feature='lbph', clf='svm',_mode='test', _verbose=VERBOSE)
         conf = int(100*conf[predicted] + 0.5)
@@ -38,8 +38,9 @@ def eval_perfomance_lbph_svm(MODE, VERBOSE=False):
             avgrtconv += conf
         if pre == 0 and conf > 50:
             cnt += 1
-    print(tr)
-    print(avgrtconv/100)
+        print("correct: ", tr)
+    print(tr/20)
+    print(avgrtconv/2000)
     print(cnt)
     plt.plot(allacc)
     plt.show()
