@@ -1,6 +1,6 @@
 #global imports
 from global_imports import plt, np, Image, cv2
-import random
+import random, os
 #local imports
 import pipeline
 
@@ -99,20 +99,53 @@ def show_damage( train_paths, test_paths):
     '''
     print (train_paths)
     print (test_paths)
-    # for author_i, tr in enumerate(train_paths):
-    #     for image_i, image_path in enumerate(tr):
-    #         image = Image.open(image_path)
-    #         plt.imshow(image)
-    #         plt.show()
-    #         file_name = 'fail_'+str(author_i)+'_'+str(image_i)+'.png'
-    #         plt.savefig(file_name)
-            
-    # for author_i, tr in enumerate(test_paths):
-    #     if len(tr) > 0:
-    #         image = Image.open(tr[0])
-    #         plt.imshow(image)
-    #         plt.show()
-    #         plt.savefig('test.png')
+    
+    rows = 3
+    cols = 3
+    axes=[]
+    fig=plt.figure(figsize=(16, 12), dpi=80)
+    i = 0
+    for author_i, author_files in enumerate(train_paths):
+        for _,tr in enumerate(author_files):
+            i += 1
+            b = cv2.imread(tr)
+            axes.append( fig.add_subplot(rows, cols, i) )
+            subplot_title=("author"+str(author_i))
+            axes[-1].set_title(subplot_title)  
+            plt.imshow(b)
+    
+    for author_i, author_files in enumerate(test_paths):
+        for _,tr in enumerate(author_files):
+            i += 1
+            b = cv2.imread(tr)
+            axes.append( fig.add_subplot(rows, cols, i) )
+            subplot_title=("author"+str(author_i))
+            axes[-1].set_title(subplot_title)  
+            plt.imshow(b)
+
+    # fig.tight_layout()    
+    # plt.show()
+
+
             
 
     input ("PROCEED?")
+
+
+
+def final_eval(_mode='test', _verbose=True):
+    itr = 0
+    failed = 0
+    set_id = 0
+    data_path = 'data/' 
+    datas = os.listdir(data_path)
+    for set_id in range(159):
+        auth = datas[set_id]
+        form_count = len(os.listdir(data_path+auth))
+        forms = os.listdir(data_path+auth)
+        for form_id in range(form_count):
+            itr += 1
+            res = pipeline.pipe(feature='cslbcop', clf='svm',_verbose=_verbose, _mode=_mode,set_id=set_id, form_id=form_id)
+            if not res: failed += 1
+            print(f'Trial: {itr}\tFailed: {failed}\tauthor: {set_id} \tform: {form_id}\n\n')
+            

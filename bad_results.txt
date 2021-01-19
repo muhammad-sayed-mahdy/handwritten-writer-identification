@@ -1,0 +1,58 @@
+data/555/n01-031.png        The ugly one
+
+data/337/g06-047f.png       only this file fails!
+
+data/341/g06-045j.png       only this file fails!
+
+data/153/c03-021d.png       only this file fails!
+
+data/153/c03-003d.png       only this file fails!
+
+data/132/c06-091.png        only this file fails!
+
+data/567/p03-103.png        only this file fails!
+
+data/158/c04-013.png        only this file fails!  
+
+data/000/a01-132x.png       only this file fails!
+
+data/000/a01-049x.png       (TWICE)
+
+data/353/g07-038.png        thickness man
+
+data/671/r06-097.png        only this file fails!
+
+data/110/b04-096.png        only this file fails! 
+
+data/181/d01-123.png        thickness man
+
+--------------------------
+
+data/555/n01-031.png        The ugly one
+
+data/350/g07-014b.png       three/five lines
+
+data/384/h06-079.png        only this file fails!
+
+data/000/a01-049x.png       (TWICE)
+
+data/353/g07-038.png        thickness man
+
+data/019/a01-117.png        only this file fails!
+
+data/092/b01-094.png        only this file fails!
+
+
+--------------------------------------
+elgded
+
+data/335/g06-050d.png       only this file fails!
+
+data/341/g06-047j.png       (TWICE)
+
+data/153/c03-021d.png       (TWICE)
+
+data/000/a01-132x.png
+
+data/000/a01-049x.png
+

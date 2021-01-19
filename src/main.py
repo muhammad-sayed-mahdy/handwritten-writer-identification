@@ -14,13 +14,10 @@ if __name__ == "__main__":
     VERBOSE = True
     #two modes: test-> for debugging    deliver-> final version
     MODE = 'test'
-    itr = 0
+    evaluations.final_eval(_mode=MODE, _verbose=VERBOSE)
     while True:
-        itr += 1
-        print (f'itr: {itr}')
-        pipeline.pipe(feature='cslbcop', clf='svm',_verbose=VERBOSE, _mode=MODE)
-
-
+        res = pipeline.pipe(feature='cslbcop', clf='svm',_verbose=VERBOSE, _mode=MODE)
+            
 
     # trials = 0
     # correct = 0

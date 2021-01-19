@@ -7,7 +7,9 @@ def preprocess(image):
     #grayscale
     gray = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
     #binary
-    ret,thresh = cv2.threshold(gray,127,255,cv2.THRESH_BINARY_INV)
+    # ret,thresh = cv2.threshold(gray,127,255,cv2.THRESH_BINARY_INV)
+    ret,thresh = cv2.threshold(gray,0,255,cv2.THRESH_OTSU)
+    thresh = 255-thresh
 
     xy_coord_lines = get_lines_coord(thresh)
     list_images = []
@@ -51,6 +53,6 @@ def get_lines_coord(image):
     for i, ctr in enumerate(sorted_ctrs):
         # Get bounding boxl
         x, y, w, h = cv2.boundingRect(ctr)
-        if(y< y_end and y>y_start and h>40):
+        if(y< y_end and y>y_start and h>25):
             lines_of_text.append((y,y+h,x,x+w))
     return  lines_of_text
