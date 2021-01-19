@@ -138,7 +138,7 @@ def final_eval(_mode='test', _verbose=True):
     itr = 0
     failed = 0
     set_id = 0
-    data_path = 'data/' 
+    data_path = 'data_tune/' 
     datas = os.listdir(data_path)
     for set_id in range(159):
         auth = datas[set_id]
@@ -146,7 +146,7 @@ def final_eval(_mode='test', _verbose=True):
         forms = os.listdir(data_path+auth)
         for form_id in range(form_count):
             itr += 1
-            res = pipeline.pipe(feature='cslbcop', clf='adaboost',_verbose=_verbose, _mode=_mode,set_id=set_id, form_id=form_id)
+            res = pipeline.pipe(feature='cslbcop', clf='svm',_verbose=_verbose, _mode=_mode,set_id=set_id, form_id=form_id)
             if not res: failed += 1
             print(f'Trial: {itr}\tFailed: {failed}\tauthor: {set_id} \tform: {form_id}\n\n')
             

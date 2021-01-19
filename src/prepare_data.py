@@ -30,9 +30,9 @@ def read_brute(set_id,form_id):
     train_paths = []
     test_paths = []
     chosen_one = datas[set_id]
-    rand_author_test_sample = random.randint(0,2)
+    rand_author_test_sample = random.randint(1,3)
     authors_picked = []
-    for author_i in range (3):
+    for author_i in range (1,4):
         user_i_train = []
         user_i_test = []
 

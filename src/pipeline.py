@@ -26,7 +26,7 @@ def step_0(_mode = 'test', _verbose=False, set_id = None,form_id=None,test_folde
             if len(tr) > 0:
                 image = cv2.imread(tr[0])
                 test_images.append(image)
-                test_label = author_i
+                test_label = author_i + 1
 
     elif _mode == 'deliver':
         train_paths, test_paths = prepare_data.fetch_deliver(test_folder)
