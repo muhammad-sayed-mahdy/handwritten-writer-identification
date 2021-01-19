@@ -1,4 +1,5 @@
 #Global imports
+from skimage.feature.texture import greycomatrix
 from global_imports import np, pywt, cv2, feature, Image
 
 
@@ -44,6 +45,14 @@ def LPBH(img,rad,p=8,xgrid =1 ,ygrid =8):
             xstart +=xstep
             ystart +=ystep
     return list_histograms
+
+def CSLBCoP(img, rad = 1, p=8):
+    img_lbp = feature.local_binary_pattern(img, p, rad)
+    img_lbp /= 8
+    img_lbp = np.uint8(img_lbp)
+    glcm = greycomatrix(img_lbp, [1], [0, 45, 90, 135], 32)
+    return glcm.flatten()
+
 
 def LTPH(img, thres = 5, xgrid = 1, ygrid = 8):
     dx = [0, 1, 1, 1, 0, -1, -1, -1]
