@@ -51,12 +51,13 @@ def step_1(images, VERBOSE=False, test_label=None):
             # x.show()
             coeffs = features.waveletTransform(img,'db4')
             cA ,(cH,cV,cD) = coeffs
-            hist_of_line_horizontal = features.LPBH(cH,1,8)
-            hist_of_line_vertical = features.LPBH(cV,1,8)
-            hist_of_line_diagonal = features.LPBH(cD,1,8)
+            hist_of_line = features.LPBH(cA,1,8)
+            #hist_of_line_horizontal = features.LPBH(cH,1,8)
+            #hist_of_line_vertical = features.LPBH(cV,1,8)
+            #hist_of_line_diagonal = features.LPBH(cD,1,8)
 
             # stacking histograms(features)
-            hist_of_line = np.hstack((hist_of_line_horizontal, hist_of_line_vertical, hist_of_line_diagonal))
+            #hist_of_line = np.hstack((hist_of_line_horizontal, hist_of_line_vertical, hist_of_line_diagonal))
             lines_count += 1
             X_list.append(hist_of_line)
             if test_label is None:
