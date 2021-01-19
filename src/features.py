@@ -18,32 +18,9 @@ def waveletTransform(imArray, Wname='db4'):
 
 def LPBH(img,rad,p=8,xgrid =1 ,ygrid =8):
     img_lbp = feature.local_binary_pattern(img,p,rad)
-
-    # should divide img into histogram grids and return histograms
-    xdim = img_lbp.shape[0]
-    ydim = img_lbp.shape[1]
-    xstep = xdim//xgrid
-    ystep  = ydim//ygrid
-    list_histograms = []
-    
     img_lbp = np.uint8(img_lbp)
     histogram = cv2.calcHist([img_lbp],[0],None,[256],[0,256])
     return histogram.flatten()
-    # x = Image.fromarray(img_lbp)
-    # x.show()
-
-    for i in range(xgrid):
-        xstart = 0
-        ystart = 0
-        for j in range(ygrid):
-            # x = Image.fromarray(img_lbp[xstart:xstart+xstep,ystart:ystart+ystep])
-            # x.show()
-            histogram = cv2.calcHist([img_lbp[xstart:xstart+xstep,ystart:ystart+ystep]],[0],None,[256],[0,256])
-            for h in histogram:
-                list_histograms.append(int(h[0]))
-            xstart +=xstep
-            ystart +=ystep
-    return list_histograms
 
 def CSLBCoP(img, rad = 1, p=8):
     img_lbp = feature.local_binary_pattern(img, p, rad)
@@ -90,3 +67,10 @@ def LTPH(img, thres = 5, xgrid = 1, ygrid = 8):
             ystart +=ystep
     return list_histograms
             
+def freq_hist(img, rad = 1, p=8):
+    img_freq = np.log(np.abs(np.fft.fft2(a=img)))
+    mx = np.max(img_freq)
+    img_freq /= 10
+    img_freq[img_freq > 1] = 1
+    img_freq *= 255
+    return LPBH(img_freq, rad=rad, p=p)
