@@ -11,9 +11,8 @@ if __name__ == "__main__":
     # evaluations.eval_pca(VERBOSE)
     # evaluations.eval_ada()
     
-    VERBOSE = True
+    VERBOSE = False
     #two modes: test-> for debugging    deliver-> final version
     MODE = 'test'
-    while True:
-        pipeline.pipe(clf='svm',_verbose=VERBOSE, _mode=MODE)
+    evaluations.eval_perfomance_lbph_svm(VERBOSE=VERBOSE, MODE=MODE)
         

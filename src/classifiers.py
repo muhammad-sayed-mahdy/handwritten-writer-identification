@@ -56,7 +56,7 @@ def call_svm(X_tune, y_tune, X_test, y_test, _verbose=False, _mode='test'):
             accuracy: a float [0,1]
     '''
     #step 0: declare
-    clf = svm.SVC(kernel='poly', C=4000,gamma='scale', probability= True, degree=1, tol=0.99)
+    clf = svm.SVC(kernel='poly', C=6000,gamma='scale', probability= True, degree=1, tol=0.99)
     #step 1: fit
     clf.fit(X_tune, y_tune)
     #step 2: predict

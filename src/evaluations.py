@@ -22,11 +22,12 @@ def eval_perfomance_lbph_svm(MODE, VERBOSE=False):
     falseacc = np.zeros(101)
     allacc = np.zeros(101)
     avgrtconv = 0
+    predicted =-1
     cnt = 0
     for i in range(100):
         print("Iteration: ", i+1)
-        pre, conf = pipeline.pipe(feature='lbph', clf='svm',_mode='test', _verbose=VERBOSE)
-        conf = int(100*conf + 0.5)
+        predicted, conf, pre = pipeline.pipe(feature='lbph', clf='svm',_mode='test', _verbose=VERBOSE)
+        conf = int(100*conf[predicted] + 0.5)
         allacc[conf] += 1
         if pre == 1:
             trueacc[conf] += 1
