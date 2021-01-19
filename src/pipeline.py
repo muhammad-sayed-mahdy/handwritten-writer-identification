@@ -61,10 +61,10 @@ def step_1(images, VERBOSE=False, test_label=None, feat = 'cslbcop'):
             coeffs = features.waveletTransform(img,'db4')
             cA ,(cH,cV,cD) = coeffs
 
-            hist_of_line = []
+            hist_of_line = None
             if feat == 'cslbcop':
                 hist_of_line = features.CSLBCoP(cA)
-            elif feat == 'lpbh':
+            elif feat == 'lbph':
                 hist_of_line = features.LPBH(cA,1,8)
 
             #hist_of_line_horizontal = features.LPBH(cH,1,8)

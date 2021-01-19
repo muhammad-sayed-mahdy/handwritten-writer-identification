@@ -23,6 +23,6 @@ or you can use conda to create a virtual environment and install packages using
         data/001/3/2.png
         data/001/test.png
     and so on...
-    3- run: python src/main.py
-    4- check results at results.txt and timing at time.txt
+    3- run: `python src/main.py`
+    4- check results at `results.txt` and timing at `time.txt`
         
