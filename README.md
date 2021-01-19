@@ -14,7 +14,9 @@ or you can use conda to create a virtual environment and install packages using
 
 ## Tuning
 
-1- regz with svm
-    + ran for 100 epochs
-    + tested with (3,2,1) forms (ie. three authors with two forms each for fitting and one for testing)
-    + results at graphs/tune_regz_svm.png
+    1- regz with svm
+        + ran for 100 epochs
+        + tested with (3,2,1) forms (ie. three authors with two forms each for fitting and one for testing)
+        + results at graphs/tune_regz_svm.png
+    
+    2- 
