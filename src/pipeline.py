@@ -13,7 +13,7 @@ def step_0(_mode = 'test', _verbose=False, set_id = None,form_id=None,test_folde
         + Fetches random images for either training or testing.
     '''
     test_label = None
-    train_images, test_images = [],[]
+    train_images, test_images, train_paths, test_paths = [],[],[],[]
     if _mode == 'test':
         train_paths, test_paths = prepare_data.fetch_data(_mode=_mode,set_id=set_id,form_id=form_id)
         #READ TRAIN
@@ -61,8 +61,9 @@ def step_1(images, VERBOSE=False, test_label=None, feat = 'cslbcop'):
             coeffs = features.waveletTransform(img,'db4')
             cA ,(cH,cV,cD) = coeffs
 
+            hist_of_line = []
             if feat == 'cslbcop':
-                hist_of_line = features.CSLBCoP(cA,1,8)
+                hist_of_line = features.CSLBCoP(cA)
             elif feat == 'lpbh':
                 hist_of_line = features.LPBH(cA,1,8)
 
@@ -147,7 +148,7 @@ def pipe(feature='cslbcop', clf='svm', _mode='test',
     if _verbose: print ('\t\tCLF..')
     
     #best_result, conf_list, correct
-    if _mode == 'test': #TODO:CAHNGE IT
+    if _mode == 'test':
         best, confd_list, res= step_3(X_tune, y_tune, X_test, y_test,
                                 _verbose=_verbose, _mode=_mode, clf=clf)
         

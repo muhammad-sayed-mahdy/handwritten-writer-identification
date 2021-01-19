@@ -16,17 +16,16 @@ def waveletTransform(imArray, Wname='db4'):
 
     return coeffs
 
-def LPBH(img,rad,p=8,xgrid =1 ,ygrid =8):
+def LPBH(img, rad, p=8):
     img_lbp = feature.local_binary_pattern(img,p,rad)
     img_lbp = np.uint8(img_lbp)
     histogram = cv2.calcHist([img_lbp],[0],None,[256],[0,256])
     return histogram.flatten()
 
-def CSLBCoP(img, rad = 1, p=8):
-    img_lbp = feature.local_binary_pattern(img, p, rad)
-    img_lbp /= 8
+def CSLBCoP(img):
+    img_lbp = feature.local_binary_pattern(img, 4, 1)
     img_lbp = np.uint8(img_lbp)
-    glcm = feature.greycomatrix(img_lbp, [1], [0, 45, 90, 135], 32)
+    glcm = feature.greycomatrix(img_lbp, [1], [0, 45, 90, 135], 16)
     return glcm.flatten()
 
 
