@@ -12,7 +12,7 @@ def step_0(_mode = 'test', _verbose=False):
     '''
         + Fetches random images for either training or testing.
     '''
-    if _mode == 'test':
+    if _mode == 'test' or _mode == 'deliver':
         train_paths, test_paths = prepare_data.fetch_data(_mode=_mode)
         train_images, test_images = [],[]
         test_label = None
@@ -29,8 +29,8 @@ def step_0(_mode = 'test', _verbose=False):
                 test_label = author_i
     
         return train_images, test_images, test_label
-    elif _mode == 'deliver':
-        pass
+    # elif _mode == 'deliver':
+    #     pass
         
 
 def step_1(images, VERBOSE=False, test_label=None):
@@ -123,8 +123,30 @@ def pipe(feature='lbph', clf='svm', _mode='test',
     X_tune,X_test = step_2(X_tune,X_test,y_tune, _verbose=_verbose,n_components=n_components)
     
     if _verbose: print ('\t\tCLF..')
-    #best_result, conf_list, correct
-    print(f"using {clf} --- {(time.time() - start_time)} seconds ---")
     
-    return step_3(X_tune, y_tune, X_test, y_test,_verbose=_verbose, _mode=_mode, clf=clf)
+    #best_result, conf_list, correct
+    if _mode == 'deliver': #TODO:CAHNGE IT
+        print(f"using {clf} --- {(time.time() - start_time)} seconds ---")
+        return step_3(X_tune, y_tune, X_test, y_test,_verbose=_verbose, _mode=_mode, clf=clf)
+    else:
+        #deliver
+        best_svm, conf_svm, _ = step_3(X_tune, y_tune, X_test, y_test=None,_verbose=_verbose, _mode=_mode, clf='svm')
+        if max(conf_svm) != 1.0:
+            #try ada and knn
+            best_ada, conf_ada, _ = step_3(X_tune, y_tune, X_test, y_test=None,_verbose=_verbose, _mode=_mode, clf='adaboost')
+            best_knn, conf_knn, _ = step_3(X_tune, y_tune, X_test, y_test=None,_verbose=_verbose, _mode=_mode, clf='knn')
+            confds  = [a + b + c for a, b, c in zip(conf_svm, conf_ada, conf_knn)]
+            best = None
+            max_val = -1
+            for i,c in enumerate(confds):
+                if c > max_val:
+                    max_val = c
+                    best = i
+            print(f"--- {(time.time() - start_time)} seconds ---")
+            if _verbose: print (f'PICKED {best}')
+            return (best==y_test[0])
+        else:
+            print(f"--- {(time.time() - start_time)} seconds ---")
+            if _verbose: print (f'PICKED {best_svm}')
+            return (best_svm==y_test[0])
     

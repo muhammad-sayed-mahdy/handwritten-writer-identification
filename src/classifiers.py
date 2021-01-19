@@ -33,7 +33,8 @@ def score(y_pred, y_test=None, _verbose=False):
         accuracy = np.sum(y_pred == y_test) / len(y_test)
         if _verbose:
             print(f'True Author: {y_test[0]}\tPred Author: {best}')
-            print (f"Predicted with accuracy:\t{accuracy*100}%")
+            print (f"Accuracy:\t{accuracy*100}%")
+            # print (f'Confidence List: {confd}')
         return best, confd, (y_test[0]==best)
 
 
@@ -76,7 +77,6 @@ def call_adaboost(X_tune, y_tune, X_test, y_test, _verbose=False, _mode='test'):
     clf = AdaBoostClassifier(DecisionTreeClassifier(max_depth=1), n_estimators = 300)
     clf.fit(X_tune, y_tune)
     y_pred = clf.predict(X_test)
-    accuracy = np.sum(y_pred == y_test) / len(y_test)
     #step 3: score
     if _mode == 'test':
         return score(y_pred,y_test=y_test, _verbose=_verbose)
