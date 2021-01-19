@@ -1,5 +1,5 @@
 #global imports
-from global_imports import cv2, np, PCA, StandardScaler
+from global_imports import cv2, np, PCA, StandardScaler, Image
 import time
 #local imports
 import prepare_data     #step 0
@@ -12,7 +12,7 @@ def step_0(_mode = 'test', _verbose=False):
     '''
         + Fetches random images for either training or testing.
     '''
-    if _mode == 'test' or _mode == 'deliver':
+    if _mode == 'test':
         train_paths, test_paths = prepare_data.fetch_data(_mode=_mode)
         train_images, test_images = [],[]
         test_label = None
@@ -28,12 +28,12 @@ def step_0(_mode = 'test', _verbose=False):
                 test_images.append(image)
                 test_label = author_i
     
-        return train_images, test_images, test_label
-    # elif _mode == 'deliver':
-    #     pass
+        return train_images, test_images, test_label, train_paths, test_paths
+    elif _mode == 'deliver':
+        pass
         
 
-def step_1(images, VERBOSE=False, test_label=None):
+def step_1(images, VERBOSE=False, test_label=None, feat = 'cslbcop'):
     '''
         + Main Pipeline starts here.
         + Takes a path to tune or test data and starts fetching, segmentation and features extraction.
@@ -45,13 +45,20 @@ def step_1(images, VERBOSE=False, test_label=None):
     y_list = []
     for author_i, image in enumerate(images):
         lines_count = 0
+        # image = cv2.imread('data/350/g07-014b.png')
         list_images = preprocessing.preprocess(image)
         for img in list_images:
             # x = Image.fromarray(img)
             # x.show()
+
             coeffs = features.waveletTransform(img,'db4')
             cA ,(cH,cV,cD) = coeffs
-            hist_of_line = features.LPBH(cA,1,8)
+
+            if feat == 'cslbcop':
+                hist_of_line = features.CSLBCoP(cA,1,8)
+            elif feat == 'lpbh':
+                hist_of_line = features.LPBH(cA,1,8)
+
             #hist_of_line_horizontal = features.LPBH(cH,1,8)
             #hist_of_line_vertical = features.LPBH(cV,1,8)
             #hist_of_line_diagonal = features.LPBH(cD,1,8)
@@ -74,7 +81,8 @@ def step_2(X_tune, X_test, y_tune,_verbose=False,n_components=33):
     X_tune = sc.fit_transform(X_tune)
     X_test = sc.transform(X_test)
     #pca
-    n_components = min(33,X_tune.shape[0]-1)
+    n_components = min(39,X_tune.shape[0]-1)
+    # n_components = X_tune.shape[0]-1
     if _verbose: print (f'N_cmp: {n_components}')
         
     pca = PCA(n_components=n_components, copy=False)
@@ -84,6 +92,7 @@ def step_2(X_tune, X_test, y_tune,_verbose=False,n_components=33):
     if _verbose: print (f'New Shapes: X_tune: {X_tune.shape}\ty_tune: {y_tune.shape}')
     # if _verbose: print(pca.explained_variance_ratio_)
     # if _verbose: print(pca.singular_values_)
+    
     return X_tune, X_test
 
 def step_3(X_tune, y_tune, X_test, y_test, _verbose=False, _mode='test', clf='svm'):
@@ -103,7 +112,7 @@ def step_3(X_tune, y_tune, X_test, y_test, _verbose=False, _mode='test', clf='sv
          
 
 
-def pipe(feature='lbph', clf='svm', _mode='test', 
+def pipe(feature='cslbcop', clf='svm', _mode='test', 
             _verbose=False,pca_scatter=False,n_components=33):
     '''
         + This is the main function call for this file.
@@ -111,13 +120,13 @@ def pipe(feature='lbph', clf='svm', _mode='test',
     '''
     if _verbose: print ('\n\t\tFetch..')
     
-    train_images, test_images, test_label = step_0(_mode=_mode)
+    train_images, test_images, test_label, train_paths, test_paths = step_0(_mode=_mode)
     
     if _verbose: print ('\t\tPreprocess and FE..')
     start_time = time.time()
     
-    X_tune,y_tune = step_1(train_images,_verbose)
-    X_test,y_test = step_1(test_images,_verbose,test_label=test_label)
+    X_tune,y_tune = step_1(train_images,_verbose, feat=feature)
+    X_test,y_test = step_1(test_images,_verbose,test_label=test_label, feat=feature)
     
     if _verbose: print ('\t\tPCA..')
     
@@ -126,9 +135,14 @@ def pipe(feature='lbph', clf='svm', _mode='test',
     if _verbose: print ('\t\tCLF..')
     
     #best_result, conf_list, correct
-    if _mode == 'deliver': #TODO:CAHNGE IT
+    if _mode == 'test': #TODO:CAHNGE IT
+        best, confd_list, res= step_3(X_tune, y_tune, X_test, y_test,
+                                _verbose=_verbose, _mode=_mode, clf=clf)
+        
         print(f"using {clf} --- {(time.time() - start_time)} seconds ---")
-        return step_3(X_tune, y_tune, X_test, y_test,_verbose=_verbose, _mode=_mode, clf=clf)
+        if not res:
+            print (f'FAILED: confd_list: {confd_list}')
+            evaluations.show_damage(train_paths, test_paths)
     else:
         #deliver
         best_svm, conf_svm, _ = step_3(X_tune, y_tune, X_test, y_test=None,_verbose=_verbose, _mode=_mode, clf='svm')

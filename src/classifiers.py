@@ -34,7 +34,6 @@ def score(y_pred, y_test=None, _verbose=False):
         if _verbose:
             print(f'True Author: {y_test[0]}\tPred Author: {best}')
             print (f"Accuracy:\t{accuracy*100}%")
-            # print (f'Confidence List: {confd}')
         return best, confd, (y_test[0]==best)
 
 

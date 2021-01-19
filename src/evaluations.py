@@ -1,5 +1,5 @@
 #global imports
-from global_imports import plt, np
+from global_imports import plt, np, Image, cv2
 import random
 #local imports
 import pipeline
@@ -91,4 +91,28 @@ def eval_ada(VERBOSE=True):
     plt.bar(est_list,acr)
     plt.show()
     plt.savefig('graphs/ada_n_estimators.png')
-        
+    
+
+def show_damage( train_paths, test_paths):
+    '''
+        FOR SURE we've failed.
+    '''
+    print (train_paths)
+    print (test_paths)
+    # for author_i, tr in enumerate(train_paths):
+    #     for image_i, image_path in enumerate(tr):
+    #         image = Image.open(image_path)
+    #         plt.imshow(image)
+    #         plt.show()
+    #         file_name = 'fail_'+str(author_i)+'_'+str(image_i)+'.png'
+    #         plt.savefig(file_name)
+            
+    # for author_i, tr in enumerate(test_paths):
+    #     if len(tr) > 0:
+    #         image = Image.open(tr[0])
+    #         plt.imshow(image)
+    #         plt.show()
+    #         plt.savefig('test.png')
+            
+
+    input ("PROCEED?")

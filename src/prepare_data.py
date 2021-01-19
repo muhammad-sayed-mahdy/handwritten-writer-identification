@@ -51,13 +51,16 @@ def fetch_data(random_authors=3, number_train_forms=2, number_test_forms=1, _mod
         test_paths = []
         
         rand_author_test_sample = random.randint(0,2)
+        authors_picked = []
         for author_i in range (3):
             user_i_train = []
             user_i_test = []
+
             rand_auth = random.choice(datas)
-            while len(os.listdir(data_path+rand_auth)) < 3 or \
-                    len(os.listdir(data_path+rand_auth)) < 2+1:
+            while len(os.listdir(data_path+rand_auth)) < 3 or rand_auth in authors_picked:
                 rand_auth = random.choice(datas)
+
+            authors_picked.append(rand_auth)            
 
             forms_paths = os.listdir(data_path+rand_auth)
             i = 0
