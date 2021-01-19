@@ -160,22 +160,26 @@ def pipe(feature='cslbcop', clf='svm', _mode='test',
     else:
         #deliver
         best_svm, conf_svm, _ = step_3(X_tune, y_tune, X_test, y_test=None,_verbose=_verbose, _mode=_mode, clf='svm')
-        if max(conf_svm) <= 0.5: #svm not so sure..
+        if _verbose: print(f"SVM conf: {conf_svm}")
+        if max(conf_svm) <= 0.7: #svm not so sure..
             #try ada and knn
-            best_ada, conf_ada, _ = step_3(X_tune, y_tune, X_test, y_test=None,_verbose=_verbose, _mode=_mode, clf='adaboost')
-            # best_knn, conf_knn, _ = step_3(X_tune, y_tune, X_test, y_test=None,_verbose=_verbose, _mode=_mode, clf='knn')
-            confds  = [a + b for a, b in zip(conf_svm, conf_ada)]
+            # best_ada, conf_ada, _ = step_3(X_tune, y_tune, X_test, y_test=None,_verbose=_verbose, _mode=_mode, clf='adaboost')
+            # if _verbose: print(f"ADA conf: {conf_ada}")
+            best_knn, conf_knn, _ = step_3(X_tune, y_tune, X_test, y_test=None,_verbose=_verbose, _mode=_mode, clf='knn')
+            if _verbose: print(f"KNN conf: {conf_knn}")
+            confds  = [a + b for a, b in zip(conf_svm, conf_knn)]
+            if _verbose: print(f"total Confds: {confds}")
             best = None
             max_val = -1
             for i,c in enumerate(confds):
                 if c > max_val:
                     max_val = c
-                    best = i
+                    best = i+1
             end_time = time.time() - start_time
             if _verbose: print(f"--- {end_time} seconds ---")
             if _verbose: print (f'PICKED {best}')
             
-            return best_ada,end_time
+            return best, end_time
         else:
             
             end_time = time.time() - start_time
