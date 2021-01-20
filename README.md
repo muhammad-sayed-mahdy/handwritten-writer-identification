@@ -28,6 +28,7 @@ Our system predicted author 1 for this test sample.
     3- run: `python src/main.py`
     4- check results at `results.txt` and timing at `time.txt`
 
+A test case folder in the data folder should contain a folder for each author containing 2 images of that author, and a test image.  
 Results file will contain -for each test case at the `data` folder- the predicted number of author that wrote the `test.png` image.  
 Author number corresponds to the folder number that contains the images of the author.
         
