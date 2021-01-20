@@ -17,13 +17,9 @@ if __name__ == "__main__":
     data_path = 'data/'
     test_folders = os.listdir(data_path)
     test_folders = sorted(test_folders,key=int)
-    if os.path.exists('results.txt'):
-        os.remove('results.txt')
-    if os.path.exists('time.txt'):
-        os.remove('time.txt')
         
-    results_file = open('results.txt',"a+")
-    time_file = open('time.txt',"a+")
+    results_file = open('results.txt',"w")
+    time_file = open('time.txt',"w")
 
     for test_folder in test_folders:
         res,time = pipeline.pipe(feature='cslbcop', clf='svm',_verbose=VERBOSE, _mode=MODE, test_folder=test_folder)
