@@ -65,3 +65,12 @@ For more information, you can refer to the [document](doc/Pattern%20Report.pdf)
 ### script folder
 you can use the `script` folder to organize the files of the IAM database, just move all the complete form images (that are like the test sample, not the words nor lines images) of the IAM database and put it in `script` folder.  
 Running the script will create a `data_tune` folder at the project directory and put the images of the same author at a separate folder in it.
+
+### Authors 
+>[Muhammad Sayed Mahdy](https://github.com/muhammad-sayed-mahdy)
+
+>[Omar Desoky](https://github.com/OmarDesoky) 
+
+>[Kareem Osama Sobeih](https://github.com/KareemOsamaSobeih)
+
+>[Evram Yousef](https://github.com/Evraa)
